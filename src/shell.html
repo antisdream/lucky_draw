@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f8f5">
+  <meta name="description" content="룰렛, 다트, 냠냠 레이스, 꼬리잡기. 원하는 이름과 번호로 만드는 나만의 럭키드로우.">
+  <meta name="color-scheme" content="light">
+  <title>나만의 럭키드로우</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23ff5494'/%3E%3Ctext x='32' y='47' font-size='48' text-anchor='middle' fill='%231e2320'%3E✳%3C/text%3E%3C/svg%3E">
+  <style>/* INLINE_CSS */</style>
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 이동</a>
+  <header class="header">
+    <button class="brand" id="home-button" aria-label="럭키드로우 게임 선택으로"><span class="brand-mark" aria-hidden="true">✳</span> lucky draw<span class="brand-dot">.</span></button>
+    <div class="header-right"><span class="offline-note"><i></i> 어디서든, 가볍게</span><button id="save-html" class="button quiet compact"><span aria-hidden="true">↓</span> HTML 저장</button></div>
+  </header>
+  <main id="main">
+    <section id="home-view" class="home-view" aria-labelledby="home-heading">
+      <div class="home-topline"><span class="eyebrow">A LITTLE PLAY, A LITTLE LUCK</span><span class="tiny-stamp">오늘의 주인공을 찾는 네 가지 방법</span></div>
+      <div class="home-intro">
+        <div><h1 id="home-heading">행운도, 고르는 재미.</h1><p class="home-lead">돌리고, 던지고, 쫓아가고.<br class="mobile-break"> 오늘은 어떤 방식으로 뽑아볼까요?</p></div>
+        <div class="host-box"><label for="owner">누구의 럭키드로우인가요?</label><div class="owner-line"><input id="owner" type="text" placeholder="우리" aria-label="럭키드로우 주최자 이름" autocomplete="off"><span>의 럭키드로우 <span aria-hidden="true">↗</span></span></div></div>
+      </div>
+      <div class="game-grid" id="game-grid">
+        <button class="game-card roulette-card" data-game="roulette"><div class="card-top"><span class="game-number">01 / SPIN</span><span class="time-chip">한 바퀴의 설렘</span></div><div class="card-art"><canvas data-preview="roulette" aria-hidden="true"></canvas></div><div class="card-bottom"><div><h2>럭키 룰렛</h2><p>빙글빙글, 행운이 멈추는 곳.</p></div><span class="card-arrow" aria-hidden="true">↗</span></div></button>
+        <button class="game-card dart-card" data-game="dart"><div class="card-top"><span class="game-number">02 / HIT</span><span class="time-chip">타이밍의 짜릿함</span></div><div class="card-art"><canvas data-preview="dart" aria-hidden="true"></canvas></div><div class="card-bottom"><div><h2>다트 한 방</h2><p>돌아가는 원판에, 행운을 꽂다.</p></div><span class="card-arrow" aria-hidden="true">↗</span></div></button>
+        <button class="game-card munch-card" data-game="munch"><div class="card-top"><span class="game-number">03 / MUNCH</span><span class="time-chip">마지막 한 입</span></div><div class="card-art"><canvas data-preview="munch" aria-hidden="true"></canvas></div><div class="card-bottom"><div><h2>냠냠 레이스</h2><p>미로 끝에서 만나는 오늘의 행운.</p></div><span class="card-arrow" aria-hidden="true">↗</span></div></button>
+        <button class="game-card tail-card" data-game="tail"><div class="card-top"><span class="game-number">04 / CHASE</span><span class="time-chip">끝까지 두근두근</span></div><div class="card-art"><canvas data-preview="tail" aria-hidden="true"></canvas></div><div class="card-bottom"><div><h2>꼬리 잡아라</h2><p>쫓고 쫓다가, 딱! 잡힌 행운.</p></div><span class="card-arrow" aria-hidden="true">↗</span></div></button>
+      </div>
+      <div class="home-footnote"><span><b aria-hidden="true">✦</b> 모임도, 발표 순서도, 오늘의 메뉴도.</span><span>후보 넣고 → 게임 시작 → 바로 확인</span></div>
+    </section>
+
+    <section id="play-view" class="play-view" hidden aria-labelledby="play-heading">
+      <div class="play-heading"><button id="back-button" class="back-button">← 게임 고르기</button><h1 id="play-heading"></h1><button id="edit-owner" class="text-button">이름 바꾸기 <span aria-hidden="true">↗</span></button></div>
+      <div class="workspace">
+        <aside class="setup-panel" aria-label="추첨 설정">
+          <fieldset id="settings"><legend class="sr-only">후보와 추첨 방법 설정</legend>
+            <div class="panel-heading"><h2>누가 참여하나요?</h2><span id="candidate-badge" class="count-badge">12명</span></div>
+            <div class="segmented" role="tablist" aria-label="후보 입력 방식"><button id="tab-numbers" role="tab" aria-selected="true" aria-controls="panel-numbers" data-mode="numbers">번호로</button><button id="tab-manual" role="tab" aria-selected="false" aria-controls="panel-manual" data-mode="manual" tabindex="-1">직접 입력</button><button id="tab-csv" role="tab" aria-selected="false" aria-controls="panel-csv" data-mode="csv" tabindex="-1">CSV 가져오기</button></div>
+            <div id="panel-numbers" class="input-panel" role="tabpanel" aria-labelledby="tab-numbers">
+              <div class="two-fields"><label>시작 번호<input id="number-start" type="text" inputmode="numeric" value="1" autocomplete="off"></label><label>후보 수<input id="number-count" type="text" inputmode="numeric" value="12" autocomplete="off"></label></div>
+              <div class="number-preview" id="number-preview"></div>
+              <button id="add-number" class="button quiet full">+ 번호 하나 추가</button>
+              <p class="helper">1명부터 원하는 만큼. 번호 범위로 준비해요.</p>
+            </div>
+            <div id="panel-manual" class="input-panel" role="tabpanel" aria-labelledby="tab-manual" hidden>
+              <div class="manual-toolbar"><span id="manual-summary">한 칸에 한 명씩</span><button id="bulk-open" class="text-button">한 번에 붙여넣기</button></div>
+              <div id="entry-rows" class="entry-rows"></div>
+              <div class="entry-pagination"><button id="entry-prev" class="icon-button" aria-label="이전 후보 페이지">←</button><span id="entry-page"></span><button id="entry-next" class="icon-button" aria-label="다음 후보 페이지">→</button></div>
+              <button id="add-entry" class="button quiet full">+ 번호로 후보 추가</button>
+              <p class="helper">빈 칸은 제외해요. 같은 이름도 각 칸을 별도 후보로 다뤄요.</p>
+            </div>
+            <div id="panel-csv" class="input-panel" role="tabpanel" aria-labelledby="tab-csv" hidden>
+              <label class="file-drop" for="csv-file"><span class="upload-symbol" aria-hidden="true">↥</span><strong>CSV 파일을 선택해주세요</strong><span id="csv-filename">여기에 파일을 끌어놓아도 돼요</span><input id="csv-file" type="file" accept=".csv,.tsv,text/csv,text/tab-separated-values"></label>
+              <label class="inline-field">파일 인코딩<select id="csv-encoding"><option value="utf-8">UTF-8 (기본)</option><option value="euc-kr">한국어 Windows (CP949)</option></select></label>
+              <div id="csv-options" hidden><label class="check-line"><input id="csv-header" type="checkbox" checked> 첫 행은 제목이에요</label><label class="inline-field">추첨에 사용할 열<select id="csv-column" aria-label="CSV 후보 열"></select></label><p id="csv-preview" class="helper"></p></div>
+              <p class="helper">이름 또는 번호가 있는 열 하나를 선택해요.</p>
+            </div>
+            <div class="settings-divider"></div>
+            <div class="panel-heading"><h2>얼마나 뽑을까요?</h2></div>
+            <div class="two-fields"><label>한 번에 뽑을 인원<input id="people" type="text" inputmode="numeric" value="1" autocomplete="off"></label><label>반복 횟수<input id="rounds" type="text" inputmode="numeric" value="1" autocomplete="off"></label></div>
+            <label class="switch-line"><span>중복 당첨 허용<small>끄면 전체 회차에서 한 번만 뽑혀요</small></span><input id="repeat" type="checkbox" role="switch"><span class="switch-visual" aria-hidden="true"></span></label>
+            <label class="speed-line" for="duration"><span>두근거리는 시간</span><select id="duration"><option value="1800">빠르게 · 1.8초</option><option value="3400" selected>적당히 · 3.4초</option><option value="5000">여유롭게 · 5초</option></select></label>
+            <p class="helper draw-summary" id="draw-summary">1회 × 1명 = 총 1명 · 연출은 한 번만</p>
+          </fieldset>
+        </aside>
+        <div class="game-panel">
+          <div class="stage-top"><div><span class="stage-eyebrow" id="stage-eyebrow">01 / SPIN</span><h2 id="game-title">럭키 룰렛</h2></div><div class="stage-tools"><button id="motion-toggle" class="icon-button" aria-label="간결한 움직임" aria-pressed="false" title="간결한 움직임">◌</button><button id="sound-toggle" class="icon-button" aria-label="효과음 켜기" aria-pressed="false" title="효과음 켜기">♪</button></div></div>
+          <div id="stage" class="stage"><canvas id="game-canvas" role="img" aria-label="추첨 게임 화면"></canvas><div id="stage-burst" class="stage-burst" aria-hidden="true"></div><div class="stage-caption"><span class="status-dot" id="status-dot"></span><span id="stage-status" role="status">준비됐나요? 행운을 돌려보세요.</span></div></div>
+          <div class="stage-action"><p id="stage-note" class="helper">모든 후보에게 같은 기회, 결과는 무작위로.</p><div id="form-error" class="form-error" role="alert" hidden></div><button id="start-button" class="button primary"><span aria-hidden="true">✳</span> <span id="start-label">룰렛 돌리기</span><span class="start-arrow" aria-hidden="true">→</span></button><div class="run-actions" id="run-actions" hidden><button id="skip-button" class="text-button">바로 결과 보기 →</button><button id="cancel-button" class="text-button">추첨 취소</button></div></div>
+        </div>
+      </div>
+      <section id="results" class="results" hidden aria-labelledby="results-heading" tabindex="-1">
+        <div class="results-header"><div><span class="eyebrow" id="result-subtitle">TODAY'S LUCKY PICKS</span><h2 id="results-heading">오늘의 행운이 도착했어요!</h2><p id="results-description"></p></div><div class="result-tools"><button id="copy-results" class="button quiet compact">결과 복사</button><button id="export-results" class="button quiet compact">CSV 저장 ↓</button></div></div>
+        <div id="result-list" class="result-list"></div>
+        <div class="result-pagination"><button id="result-prev" class="button quiet compact">← 이전</button><span id="result-page"></span><button id="result-next" class="button quiet compact">다음 →</button></div>
+        <p class="result-footnote">같은 설정으로 다시 시작하면 새로운 추첨이 진행돼요.</p>
+      </section>
+    </section>
+  </main>
+  <footer class="footer"><span class="footer-brand">lucky draw. <span>작은 선택을 즐겁게.</span></span><span>설치 없이 · 인터넷 없이 · 우리끼리</span></footer>
+  <dialog id="bulk-dialog" aria-labelledby="bulk-heading"><form method="dialog" class="dialog-content"><div class="dialog-heading"><h2 id="bulk-heading">후보를 한 번에 넣기</h2><button value="cancel" class="icon-button" aria-label="닫기">×</button></div><p>한 줄에 한 명씩 입력해주세요. 쉼표는 이름의 일부로 유지해요.</p><textarea id="bulk-text" rows="10" placeholder="김하늘&#10;이바다&#10;박별" aria-label="후보 목록"></textarea><label class="check-line"><input id="bulk-append" type="checkbox"> 기존 후보에 이어서 추가하기</label><div class="dialog-actions"><button value="cancel" class="button quiet">취소</button><button id="bulk-apply" type="button" class="button primary">후보 적용 →</button></div></form></dialog>
+  <dialog id="owner-dialog" aria-labelledby="owner-heading"><form method="dialog" class="dialog-content"><div class="dialog-heading"><h2 id="owner-heading">우리만의 이름으로</h2><button value="cancel" class="icon-button" aria-label="닫기">×</button></div><label>럭키드로우 주최자 이름<input id="owner-edit" type="text" placeholder="우리" autocomplete="off"></label><p>한글, 영어, 긴 이름도 그대로 쓸 수 있어요.</p><button id="owner-apply" value="apply" class="button primary">이름 적용 →</button></form></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <noscript><div class="noscript">추첨을 실행하려면 브라우저 설정에서 JavaScript를 켜주세요.</div></noscript>
+  <script id="portable-state" type="application/json">{}</script>
+  <script>/* INLINE_JS */</script>
+</body>
+</html>
