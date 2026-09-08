@@ -5,7 +5,7 @@ import vm from 'node:vm';
 
 const [shell,app,core,css]=await Promise.all(['shell.html','app.js','core.js','style.css'].map(file=>readFile(new URL(`../src/${file}`,import.meta.url),'utf8')));
 test('독립 HTML에는 외부 자산, 네트워크 의존, 글자 수 상한이 없다',()=>{
-  assert.doesNotMatch(shell,/\b(?:src|href)\s*=\s*["'](?:https?:)?\/\//i);
+  assert.doesNotMatch(shell,/<(?:script|img|iframe|link)\b[^>]*\b(?:src|href)\s*=\s*["'](?:https?:)?\/\//i);
   assert.doesNotMatch(css,/@import|url\(["']?https?:/i);
   assert.doesNotMatch(app,/\bfetch\s*\(|XMLHttpRequest|WebSocket/);
   assert.doesNotMatch(shell,/maxlength\s*=/i);

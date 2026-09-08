@@ -6,15 +6,26 @@
   <meta name="theme-color" content="#f8f8f5">
   <meta name="description" content="룰렛, 다트, 냠냠 레이스, 꼬리잡기. 원하는 이름과 번호로 만드는 나만의 럭키드로우.">
   <meta name="color-scheme" content="light">
+  <meta name="lucky-draw-shell" content="standalone-v1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>나만의 럭키드로우</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23ff5494'/%3E%3Ctext x='32' y='47' font-size='48' text-anchor='middle' fill='%231e2320'%3E✳%3C/text%3E%3C/svg%3E">
   <style>/* INLINE_CSS */</style>
 </head>
-<body>
+<body data-app-ready="false">
+  <section id="launch-help" class="launch-help" aria-labelledby="launch-heading">
+    <span class="brand-mark" aria-hidden="true">✳</span>
+    <h1 id="launch-heading">파일에 게임은 모두 들어 있어요</h1>
+    <p id="launch-message">이 화면이 계속 보인다면 지금 앱이 HTML을 미리보기로 열었거나 JavaScript 실행을 허용하지 않는 상태입니다. JavaScript를 따로 내려받거나 설치할 필요는 없습니다.</p>
+    <ol><li><strong>PC</strong> — 파일을 저장한 뒤 마우스 오른쪽 버튼 → 연결 프로그램 → Chrome 또는 Edge로 여세요.</li><li><strong>모바일</strong> — 아래 웹 버전을 Safari 또는 Chrome에서 여세요. 실행·저장 도움말에서 오프라인 준비와 저장한 HTML 불러오기를 할 수 있습니다.</li></ol>
+    <a class="button primary" href="https://lucky-draw-antisdream.skn29final4team.chatgpt.site" target="_blank" rel="noopener">브라우저에서 웹 버전 열기 ↗</a>
+    <p class="helper">웹 버전의 첫 실행에는 인터넷과 소유자 로그인이 필요합니다. 파일 미리보기 앱의 실행 제한은 HTML 파일에서 바꿀 수 없습니다.</p>
+    <pre id="launch-detail" hidden></pre>
+  </section>
   <a class="skip-link" href="#main">본문으로 이동</a>
   <header class="header">
     <button class="brand" id="home-button" aria-label="럭키드로우 게임 선택으로"><span class="brand-mark" aria-hidden="true">✳</span> lucky draw<span class="brand-dot">.</span></button>
-    <div class="header-right"><span class="offline-note"><i></i> 어디서든, 가볍게</span><button id="save-html" class="button quiet compact"><span aria-hidden="true">↓</span> HTML 저장</button></div>
+    <div class="header-right"><span class="offline-note"><i></i> 어디서든, 가볍게</span><button id="save-html" class="button quiet compact"><span aria-hidden="true">↓</span> HTML 저장</button><button id="usage-help" class="icon-button" aria-label="실행·저장 도움말">?</button></div>
   </header>
   <main id="main">
     <section id="home-view" class="home-view" aria-labelledby="home-heading">
@@ -83,9 +94,11 @@
   <footer class="footer"><span class="footer-brand">lucky draw. <span>작은 선택을 즐겁게.</span></span><span>설치 없이 · 인터넷 없이 · 우리끼리</span></footer>
   <dialog id="bulk-dialog" aria-labelledby="bulk-heading"><form method="dialog" class="dialog-content"><div class="dialog-heading"><h2 id="bulk-heading">후보를 한 번에 넣기</h2><button value="cancel" class="icon-button" aria-label="닫기">×</button></div><p>한 줄에 한 명씩 입력해주세요. 쉼표는 이름의 일부로 유지해요.</p><textarea id="bulk-text" rows="10" placeholder="김하늘&#10;이바다&#10;박별" aria-label="후보 목록"></textarea><label class="check-line"><input id="bulk-append" type="checkbox"> 기존 후보에 이어서 추가하기</label><div class="dialog-actions"><button value="cancel" class="button quiet">취소</button><button id="bulk-apply" type="button" class="button primary">후보 적용 →</button></div></form></dialog>
   <dialog id="owner-dialog" aria-labelledby="owner-heading"><form method="dialog" class="dialog-content"><div class="dialog-heading"><h2 id="owner-heading">우리만의 이름으로</h2><button value="cancel" class="icon-button" aria-label="닫기">×</button></div><label>럭키드로우 주최자 이름<input id="owner-edit" type="text" placeholder="우리" autocomplete="off"></label><p>한글, 영어, 긴 이름도 그대로 쓸 수 있어요.</p><button id="owner-apply" value="apply" class="button primary">이름 적용 →</button></form></dialog>
+  <dialog id="usage-dialog" aria-labelledby="usage-heading"><div class="dialog-content"><div class="dialog-heading"><h2 id="usage-heading">어디서든 다시 열기</h2><button id="usage-close" class="icon-button" aria-label="도움말 닫기">×</button></div><p class="runtime-status" id="runtime-status" role="status">실행 환경 확인 중</p><div class="usage-section"><h3>PC에서 HTML 하나로</h3><p>HTML 저장으로 받은 파일을 Chrome·Edge·Firefox·Safari 등 JavaScript가 실행되는 브라우저에서 여세요. 별도 설치나 인터넷 연결은 필요하지 않습니다.</p></div><div class="usage-section"><h3>모바일에서 오프라인으로</h3><p>웹 버전을 Safari 또는 Chrome에서 열고 오프라인 준비를 누르세요. 완료 후 브라우저 메뉴의 홈 화면에 추가를 이용할 수 있습니다.</p><a id="web-version" href="https://lucky-draw-antisdream.skn29final4team.chatgpt.site" target="_blank" rel="noopener">웹 버전 열기 ↗</a><button id="prepare-offline" class="button quiet full">이 기기에서 오프라인 준비</button><p id="offline-status" class="helper" role="status">처음 준비할 때만 인터넷 연결이 필요합니다.</p></div><div class="usage-section"><h3>후보와 설정 가져가기</h3><p>모바일 파일 앱에서 HTML이 실행되지 않으면 아래 버튼으로 저장한 HTML을 불러오세요. 파일의 게임 코드를 실행하지 않고 후보·설정·결과만 복원합니다.</p><label class="file-drop compact-drop" for="restore-file"><strong>저장한 HTML 불러오기</strong><input id="restore-file" type="file" accept=".html,text/html"></label><button id="save-device" class="button quiet full">현재 후보·설정을 이 기기에 저장</button><p id="device-status" class="helper" role="status">이 기기 저장은 웹 버전에서 지원합니다. 설정을 바꾸면 다시 저장해주세요.</p></div></div></dialog>
+  <dialog id="download-dialog" aria-labelledby="download-heading"><div class="dialog-content"><div class="dialog-heading"><h2 id="download-heading">HTML 파일이 준비됐어요</h2><button id="download-close" class="icon-button" aria-label="저장 안내 닫기">×</button></div><p>자동 다운로드가 시작되지 않으면 아래 버튼을 누르세요. 파일 앱의 미리보기에서는 게임이 실행되지 않을 수 있습니다.</p><a id="download-html-link" class="button primary" download="lucky_draw.html">HTML 내려받기 ↓</a><button id="share-html" class="button quiet" hidden>파일로 공유·저장</button><p id="download-status" class="helper" role="status">내려받은 파일은 브라우저로 열거나 웹 버전의 저장한 HTML 불러오기로 복원하세요.</p></div></dialog>
   <div id="toast" class="toast" role="status" hidden></div>
-  <noscript><div class="noscript">추첨을 실행하려면 브라우저 설정에서 JavaScript를 켜주세요.</div></noscript>
   <script id="portable-state" type="application/json">{}</script>
+  <script>/* INLINE_BOOTSTRAP */</script>
   <script>/* INLINE_JS */</script>
 </body>
 </html>

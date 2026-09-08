@@ -10,6 +10,12 @@ const GAMES = {
 const ENTRY_PAGE_SIZE = 6, RESULT_PAGE_SIZE = 24, DISPLAY_SIZE = 12;
 let portable = {};
 try { portable = JSON.parse($('portable-state').textContent || '{}'); } catch { /* Fall back to an empty setup. */ }
+const DEVICE_STORAGE_KEY = 'lucky-draw.portable.v1';
+const webEnvironment = typeof location !== 'undefined' && /^https?:$/.test(location.protocol);
+const installableLocation = webEnvironment && (/\/$/.test(location.pathname) || /\/index\.html$/.test(location.pathname));
+if (!portable.config && webEnvironment) {
+  try { const saved=localStorage.getItem(DEVICE_STORAGE_KEY);if(saved)portable=normalizePortable(JSON.parse(saved)); } catch { /* Storage can be unavailable or contain an older save. */ }
+}
 const defaults = { owner: '', mode: 'numbers', start: '1', count: '12', people: '1', rounds: '1', repeat: false, duration: '3400', game: 'roulette', reduced: false, manual: ['1','2','3','4','5','6'], csvEntries: [] };
 const state = { ...defaults };
 if (portable.config && typeof portable.config === 'object') {
@@ -23,8 +29,9 @@ if (portable.config && typeof portable.config === 'object') {
 let entryPage = 0, resultPage = 0, csvRows = [], csvFile = null, csvLoadId = 0;
 let running = false, activeRun = null, lastResult = null, resultFresh = true;
 let soundEnabled = false, audioContext = null, toastTimer;
+let htmlDownloadUrl = null, htmlShareFile = null;
 let stageFrame = { progress: 0, items: [], winner: 0, ended: false };
-const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+const motionPreference = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : {matches:false};
 const reducedMotion = () => state.reduced || motionPreference.matches;
 const nextPaint = () => new Promise(resolve => setTimeout(resolve, 0));
 
@@ -167,6 +174,7 @@ async function loadCsv(file) {
 }
 function selectGame(game, changeView = true) {
   if (running || !Object.hasOwn(GAMES, game)) return;
+  if (lastResult && lastResult.game !== game) markChanged();
   state.game = game;
   $('game-title').textContent = GAMES[game].title; $('stage-eyebrow').textContent = GAMES[game].eyebrow;
   $('start-label').textContent = GAMES[game].action; $('game-canvas').setAttribute('aria-label', `${GAMES[game].title} 추첨 화면`);
@@ -184,6 +192,7 @@ function setRunning(value) {
   running = value; $('settings').disabled = value; $('start-button').disabled = value;
   $('home-button').disabled = value; $('back-button').disabled = value; $('edit-owner').disabled = value;
   $('save-html').disabled = value; $('run-actions').hidden = !value;
+  $('restore-file').disabled = value; $('save-device').disabled = value;
   document.querySelector('.game-panel').classList.toggle('is-running', value);
   $('game-canvas').setAttribute('aria-busy', String(value));
 }
@@ -262,7 +271,7 @@ function finishRun(run) {
   if (!reducedMotion()) burst();
   tone(523.25, .14, .045); setTimeout(() => tone(659.25, .16, .035), 90); setTimeout(() => tone(783.99, .23, .035), 180);
   $('results').focus({ preventScroll: true });
-  $('results').scrollIntoView({ behavior: reducedMotion() ? 'instant' : 'smooth', block: 'nearest' });
+  $('results').scrollIntoView({ behavior: 'instant', block: 'start' });
 }
 function cancelDraw() {
   if (!activeRun) return;
@@ -312,7 +321,10 @@ function line(ctx, points, color, width = 2) {
   ctx.beginPath(); points.forEach(([x,y], i) => i ? ctx.lineTo(x,y) : ctx.moveTo(x,y)); ctx.strokeStyle = color; ctx.lineWidth = width; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.stroke();
 }
 function roundBox(ctx, x, y, w, h, r, fill, stroke = null) {
-  ctx.beginPath(); ctx.roundRect(x,y,w,h,r); if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+  ctx.beginPath();
+  if(ctx.roundRect)ctx.roundRect(x,y,w,h,r);
+  else{const radius=Math.min(r,w/2,h/2);ctx.moveTo(x+radius,y);ctx.arcTo(x+w,y,x+w,y+h,radius);ctx.arcTo(x+w,y+h,x,y+h,radius);ctx.arcTo(x,y+h,x,y,radius);ctx.arcTo(x,y,x+w,y,radius);ctx.closePath();}
+  if (fill) { ctx.fillStyle = fill; ctx.fill(); }
   if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1.5; ctx.stroke(); }
 }
 function canvasText(ctx, text, x, y, size = 16, color = '#202721', weight = 700, align = 'center', maxWidth = null) {
@@ -458,12 +470,13 @@ function tone(frequency,duration,volume){
 function updateSound(){const label=soundEnabled?'효과음 끄기':'효과음 켜기';$('sound-toggle').setAttribute('aria-pressed',String(soundEnabled));$('sound-toggle').setAttribute('aria-label',label);$('sound-toggle').title=label;}
 function updateMotion(){document.body.dataset.reduced=String(reducedMotion());$('motion-toggle').setAttribute('aria-pressed',String(reducedMotion()));$('motion-toggle').title=reducedMotion()?'간결한 움직임 사용 중':'간결한 움직임';}
 function download(blob,name){const url=URL.createObjectURL(blob),a=el('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);}
+function getPortableSnapshot(){configFromInputs();return {version:1,config:{...state},lastResult,resultFresh,view:$('play-view').hidden?'home':'play'};}
 async function exportCsv(){
   if(!lastResult)return;
   const snapshot=lastResult, parts=['\uFEFF'+['회차','회차 내 순서','이름 또는 번호','후보 ID','게임','추첨 시각'].map(csvCell).join(',')+'\r\n'];
   const perRound=BigInt(snapshot.perRound);
   for(let offset=0;offset<snapshot.draws.length;offset+=2000){let block='';for(let i=offset;i<Math.min(offset+2000,snapshot.draws.length);i++){const row=snapshot.draws[i];block+=[BigInt(i)/perRound+1n,BigInt(i)%perRound+1n,row.label,row.id,GAMES[snapshot.game].title,snapshot.at].map(csvCell).join(',')+'\r\n';}parts.push(block);await nextPaint();}
-  download(new Blob(parts,{type:'text/csv;charset=utf-8'}),'lucky-draw-results.csv');toast('모든 회차의 결과를 CSV로 저장했어요.');
+  download(new Blob(parts,{type:'text/csv;charset=utf-8'}),'lucky-draw-results.csv');toast('CSV 다운로드를 요청했어요. 내려받은 파일을 확인해주세요.');
 }
 async function copyResults(){
   if(!lastResult)return;
@@ -475,21 +488,82 @@ async function copyResults(){
 function exportHtml(){
   if(running)return;
   try{
-    configFromInputs();
-  const snapshot={version:1,config:{...state},lastResult,resultFresh,view:$('play-view').hidden?'home':'play'};
+    const snapshot=getPortableSnapshot();
     const clone=document.documentElement.cloneNode(true);
     clone.querySelector('#portable-state').textContent=safeJSON(snapshot);
     clone.querySelectorAll('dialog').forEach(dialog=>dialog.removeAttribute('open'));
     clone.querySelector('#toast').hidden=true;clone.querySelector('#stage-burst').replaceChildren();
+    clone.querySelector('body').setAttribute('data-app-ready','false');clone.querySelector('#launch-help').hidden=false;
+    clone.querySelector('#download-html-link').removeAttribute('href');
+    clone.querySelectorAll('[data-hosted-asset]').forEach(asset=>asset.remove());
     const html='<!doctype html>\n'+clone.outerHTML;
-    download(new Blob([html],{type:'text/html;charset=utf-8'}),'lucky_draw.html');
-    toast('후보·설정·마지막 결과를 담은 HTML을 저장했어요.');
+    const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+    if(htmlDownloadUrl){const old=htmlDownloadUrl;setTimeout(()=>URL.revokeObjectURL(old),30000);}
+    htmlDownloadUrl=URL.createObjectURL(blob);$('download-html-link').href=htmlDownloadUrl;
+    htmlShareFile=typeof File==='function'?new File([blob],'lucky_draw.html',{type:'text/html'}):null;
+    let shareable=false;try{shareable=!!(htmlShareFile&&navigator.canShare&&navigator.canShare({files:[htmlShareFile]}));}catch{}
+    $('share-html').hidden=!shareable;$('download-status').textContent='후보·설정·마지막 결과를 담았습니다. 내려받은 파일을 확인해주세요.';
+    $('download-dialog').showModal();$('download-html-link').click();
   }catch{toast('파일을 담을 메모리가 부족해요. 후보나 결과 수를 줄여주세요.');}
 }
 
+function writeStateInputs(){
+  $('owner').value=state.owner;$('number-start').value=state.start;$('number-count').value=state.count;
+  $('people').value=state.people;$('rounds').value=state.rounds;$('repeat').checked=state.repeat;$('duration').value=state.duration;
+}
+function applyPortableSnapshot(snapshot){
+  if(running)throw new Error('추첨이 끝난 뒤 파일을 불러와주세요.');
+  const checked=normalizePortable(snapshot);
+  Object.assign(state,{...defaults,manual:['1','2','3','4','5','6'],csvEntries:[]},checked.config);
+  lastResult=null;entryPage=0;resultPage=0;csvRows=[];csvFile=null;csvLoadId++;
+  $('results').hidden=true;$('csv-options').hidden=true;$('csv-filename').textContent='여기에 파일을 끌어놓아도 돼요';
+  writeStateInputs();
+  if(state.csvEntries.length){csvRows=state.csvEntries.map(label=>[label]);$('csv-header').checked=false;$('csv-filename').textContent='HTML에서 불러온 후보';refreshCsvColumns();}
+  setMode(state.mode);selectGame(state.game,checked.view==='play');if(checked.view!=='play')goHome();
+  lastResult=checked.lastResult;resultFresh=checked.resultFresh;updateOwner();updateMotion();
+  if(lastResult)renderResults();
+}
+async function restoreSavedFile(file){
+  if(!file||running)return;
+  try{const text=typeof file.text==='function'?await file.text():await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('파일을 읽지 못했어요.'));reader.readAsText(file,'utf-8');});
+    const snapshot=readPortableHTML(text);applyPortableSnapshot(snapshot);$('usage-dialog').close();toast('저장된 후보·설정·결과를 불러왔어요.');
+  }catch(error){$('device-status').textContent=error.message;}
+  $('restore-file').value='';
+}
+function showUsage(){
+  $('runtime-status').textContent='실행 확인: JavaScript · 게임 화면 · 무작위 추첨 · 파일 읽기';
+  $('save-device').disabled=running||!webEnvironment;
+  $('prepare-offline').disabled=!installableLocation||!window.isSecureContext||!('serviceWorker' in navigator);
+  if(!webEnvironment)$('offline-status').textContent='현재 HTML은 파일 안의 코드로 작동합니다. 모바일 오프라인 준비는 웹 버전에서 이용하세요.';
+  else if($('prepare-offline').disabled)$('offline-status').textContent='이 주소에서는 오프라인 준비가 지원되지 않아요. HTTPS 웹 버전을 사용해주세요.';
+  $('usage-dialog').showModal();
+}
+async function prepareOffline(){
+  if(!installableLocation||!window.isSecureContext||!('serviceWorker' in navigator))return;
+  $('prepare-offline').disabled=true;$('offline-status').textContent='이 기기에 게임을 준비하고 있어요…';
+  try{
+    if(!document.querySelector('link[data-hosted-asset]')){const manifest=el('link');manifest.rel='manifest';manifest.href='./app.webmanifest';manifest.dataset.hostedAsset='manifest';document.head.append(manifest);}
+    const registration=await navigator.serviceWorker.register('./sw.js',{scope:'./'});
+    const worker=registration.installing||registration.waiting||registration.active;
+    if(!worker)throw new Error('준비를 시작하지 못했어요.');
+    if(worker.state!=='activated')await new Promise((resolve,reject)=>{
+      const timer=setTimeout(()=>{worker.removeEventListener('statechange',changed);reject(new Error('준비 시간이 초과됐어요.'));},20000);
+      function changed(){if(worker.state==='activated'||worker.state==='redundant'){clearTimeout(timer);worker.removeEventListener('statechange',changed);worker.state==='activated'?resolve():reject(new Error('앱 파일을 저장하지 못했어요.'));}}
+      worker.addEventListener('statechange',changed);changed();
+    });
+    $('offline-status').textContent='오프라인 준비 완료. 브라우저 메뉴에서 홈 화면에 추가하세요. 후보·설정은 아래 버튼으로 별도 저장할 수 있어요.';
+    $('prepare-offline').textContent='오프라인 파일 다시 준비';
+  }catch{$('offline-status').textContent='오프라인 준비를 완료하지 못했어요. 웹 버전에 로그인했는지, 인터넷 연결이 있는지 확인한 뒤 다시 시도해주세요.';}
+  $('prepare-offline').disabled=false;
+}
+function saveOnDevice(){
+  if(!webEnvironment||running)return;
+  try{localStorage.setItem(DEVICE_STORAGE_KEY,safeJSON(getPortableSnapshot()));$('device-status').textContent='현재 후보·설정·마지막 결과를 이 기기에 저장했어요. 설정을 바꾸면 다시 저장해주세요.';}
+  catch{$('device-status').textContent='이 브라우저에서 저장 공간을 사용할 수 없어요. HTML 저장을 이용해주세요.';}
+}
+
 // Bind controls after restoring the portable document's data.
-$('owner').value=state.owner;$('number-start').value=state.start;$('number-count').value=state.count;
-$('people').value=state.people;$('rounds').value=state.rounds;$('repeat').checked=state.repeat;$('duration').value=state.duration;
+writeStateInputs();
 $('settings').disabled=false;$('home-button').disabled=false;$('back-button').disabled=false;$('save-html').disabled=false;$('edit-owner').disabled=false;$('start-button').disabled=false;
 $('run-actions').hidden=true;$('form-error').hidden=true;$('results').hidden=true;
 $('owner').addEventListener('input',()=>{updateOwner();markChanged();});
@@ -515,12 +589,17 @@ $('start-button').addEventListener('click',startDraw);$('cancel-button').addEven
 $('skip-button').addEventListener('click',()=>{if(!activeRun)return;activeRun.skip=true;if(activeRun.computed)finishRun(activeRun);else toast('연출은 건너뛰고, 결과 계산을 마치는 대로 보여드릴게요.');});
 $('sound-toggle').addEventListener('click',()=>{soundEnabled=!soundEnabled;if(soundEnabled)initSound();updateSound();if(soundEnabled)tone(660,.1,.03);});
 $('motion-toggle').addEventListener('click',()=>{state.reduced=!state.reduced;updateMotion();if(motionPreference.matches&&!state.reduced)toast('기기의 움직임 줄이기 설정을 적용하고 있어요.');});
-motionPreference.addEventListener('change',updateMotion);
+if(motionPreference.addEventListener)motionPreference.addEventListener('change',updateMotion);else if(motionPreference.addListener)motionPreference.addListener(updateMotion);
 $('result-prev').addEventListener('click',()=>{resultPage--;renderResults();});$('result-next').addEventListener('click',()=>{resultPage++;renderResults();});
 $('copy-results').addEventListener('click',copyResults);$('export-results').addEventListener('click',()=>exportCsv().catch(()=>toast('결과 파일을 만들지 못했어요. 다시 시도해주세요.')));
 $('save-html').addEventListener('click',exportHtml);
-let resizeFrame;const resizeObserver=new ResizeObserver(()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{renderStage();renderPreviews();});});
-resizeObserver.observe($('game-canvas'));document.querySelectorAll('[data-preview]').forEach(canvas=>resizeObserver.observe(canvas));
+$('usage-help').addEventListener('click',showUsage);$('usage-close').addEventListener('click',()=>$('usage-dialog').close());
+$('restore-file').addEventListener('change',event=>restoreSavedFile(event.target.files[0]));
+$('prepare-offline').addEventListener('click',prepareOffline);$('save-device').addEventListener('click',saveOnDevice);
+$('download-close').addEventListener('click',()=>$('download-dialog').close());
+$('share-html').addEventListener('click',async()=>{try{await navigator.share({files:[htmlShareFile]});$('download-status').textContent='파일 공유 창에서 저장 위치를 확인해주세요.';}catch(error){if(error.name!=='AbortError')$('download-status').textContent='파일 공유를 지원하지 않아요. HTML 내려받기를 이용해주세요.';}});
+let resizeFrame;function scheduleResize(){cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{renderStage();renderPreviews();});}
+if(typeof ResizeObserver==='function'){const resizeObserver=new ResizeObserver(scheduleResize);resizeObserver.observe($('game-canvas'));document.querySelectorAll('[data-preview]').forEach(canvas=>resizeObserver.observe(canvas));}else window.addEventListener('resize',scheduleResize);
 if(state.csvEntries.length){csvRows=state.csvEntries.map(label=>[label]);$('csv-header').checked=false;$('csv-filename').textContent='HTML에 저장된 후보';refreshCsvColumns();}
 setMode(state.mode);selectGame(state.game,portable.view==='play');updateOwner();updateSound();updateMotion();
 if(portable.view!=='play')goHome();
@@ -532,3 +611,4 @@ try{
   }
 }catch{lastResult=null;}
 requestAnimationFrame(()=>{renderStage();renderPreviews();});
+if(window.LuckyBoot)window.LuckyBoot.ready();

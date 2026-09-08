@@ -1,0 +1,13 @@
+{
+  "id": "./",
+  "name": "나만의 럭키드로우",
+  "short_name": "럭키드로우",
+  "description": "네 가지 짧고 즐거운 게임으로 뽑는 이름과 번호",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8f8f5",
+  "theme_color": "#f8f8f5",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

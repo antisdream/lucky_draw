@@ -6,10 +6,13 @@
   <meta name="theme-color" content="#f8f8f5">
   <meta name="description" content="룰렛, 다트, 냠냠 레이스, 꼬리잡기. 원하는 이름과 번호로 만드는 나만의 럭키드로우.">
   <meta name="color-scheme" content="light">
+  <meta name="lucky-draw-shell" content="standalone-v1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>나만의 럭키드로우</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23ff5494'/%3E%3Ctext x='32' y='47' font-size='48' text-anchor='middle' fill='%231e2320'%3E✳%3C/text%3E%3C/svg%3E">
   <style>:root{--paper:#f8f8f5;--ink:#202721;--muted:#647069;--line:#dfe3dc;--pink:#ff5494;--lime:#dcf36b;--blue:#5677ed;--radius:22px;font-family:Inter,"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic",sans-serif;color:var(--ink);background:var(--paper);font-synthesis:none}
 *{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}button:disabled{cursor:default;opacity:.45}button,input,select,textarea{-webkit-tap-highlight-color:transparent}button{touch-action:manipulation}button:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offset:4px}input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #5677ed55;border-color:var(--blue)}input,select,textarea{border:1px solid var(--line);background:white;border-radius:10px;min-height:44px;padding:10px 12px;min-width:0;width:100%}input[type=checkbox]{width:18px;min-height:18px;height:18px;accent-color:var(--ink);flex-shrink:0}label{display:flex;flex-direction:column;gap:8px;font-size:.875rem;font-weight:550}p,h1,h2,h3{margin:0}button{border:0}button svg{width:20px;height:20px}[hidden]{display:none!important}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.skip-link{position:fixed;top:-80px;left:20px;padding:16px;background:var(--ink);color:white;z-index:100}.skip-link:focus{top:10px}.header{max-width:1440px;margin:auto;padding:26px 48px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);gap:20px}.brand{font-size:1.7rem;font-weight:850;letter-spacing:-1.5px;background:none;display:flex;align-items:center;padding:0;white-space:nowrap}.brand-mark{font-size:2.55rem;line-height:1;color:var(--pink);margin-right:11px;font-weight:400}.brand-dot{color:var(--pink)}.header-right{display:flex;align-items:center;gap:26px}.offline-note{font-size:.8125rem;color:var(--muted);display:flex;align-items:center;gap:7px}.offline-note i{height:6px;width:6px;background:#55a57b;border-radius:50%}.button{border:1px solid var(--ink);padding:13px 20px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:10px;font-weight:650;font-size:.9375rem;min-height:48px;transition:background .15s,transform .15s}.button:hover:not(:disabled){transform:translateY(-1px)}.button.quiet{background:transparent;border-color:var(--line)}.button.quiet:hover:not(:disabled){background:#eef0e9;border-color:#bbc3b8}.button.compact{font-size:.875rem;min-height:42px;padding:9px 14px}.button.full{width:100%}.button.primary{background:var(--ink);color:white}.button.primary:hover:not(:disabled){background:#344738}.eyebrow{font-size:.75rem;font-weight:700;letter-spacing:1.9px}.home-view{max-width:1344px;margin:0 auto;padding:39px 0 0}.home-topline{display:flex;justify-content:space-between;align-items:center}.tiny-stamp{font-size:.8125rem;color:var(--muted)}.home-intro{display:flex;align-items:center;justify-content:space-between;gap:40px;padding:30px 0 37px}.home-intro h1{font-size:clamp(2rem,3.1vw,3rem);line-height:1.2;letter-spacing:-2px;font-weight:850}.home-lead{font-size:1rem;color:var(--muted);line-height:1.7;margin-top:16px;letter-spacing:-.25px}.mobile-break{display:none}.host-box{width:345px;flex-shrink:0;align-self:center;padding-top:5px}.host-box>label{font-size:.8125rem;color:var(--muted);font-weight:450;margin-bottom:8px}.owner-line{display:flex;align-items:center;gap:5px;border-bottom:1.5px solid var(--ink);padding-bottom:7px}.owner-line input{width:130px;flex:1;background:none;border:0;border-radius:0;font-size:1.2rem;padding:3px 0;min-height:36px;font-weight:750}.owner-line>span{font-size:1.06rem;white-space:nowrap;font-weight:550}.owner-line>span>span{padding-left:18px;color:var(--pink)}.game-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}.game-card{position:relative;text-align:left;border:1px solid #18271c1f;border-radius:var(--radius);padding:20px 20px 23px;color:var(--ink);overflow:hidden;transition:transform .22s,box-shadow .22s;min-width:0}.game-card:hover{transform:translateY(-7px);box-shadow:0 12px 0 -5px #1c2a1817}.game-card:hover .card-arrow{background:var(--ink);color:white;transform:rotate(45deg)}.roulette-card{background:#f9bad1}.dart-card{background:var(--lime)}.munch-card{background:#c7d3ff}.tail-card{background:#ffd6a7}.card-top{display:flex;align-items:center;justify-content:space-between;gap:4px}.game-number{font-size:.75rem;letter-spacing:1.2px;font-weight:650;white-space:nowrap}.time-chip{font-size:.75rem;border:1px solid #20272129;padding:5px 8px;border-radius:30px;white-space:nowrap}.card-art{height:224px;margin:5px -14px 5px;position:relative}.card-art canvas{height:100%;width:100%;display:block}.card-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px}.card-bottom h2{font-size:1.42rem;letter-spacing:-.75px;font-weight:800}.card-bottom p{font-size:.8125rem;color:#334239;margin-top:8px;line-height:1.5;letter-spacing:-.3px}.card-arrow{height:38px;width:38px;flex-shrink:0;border:1px solid #20272144;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:1.5rem;transition:transform .2s,background .2s}.home-footnote{display:flex;justify-content:space-between;padding:26px 1px 36px;font-size:.8125rem;color:var(--muted);gap:12px}.home-footnote b{font-size:1.12rem;color:var(--pink);margin-right:5px}.footer{max-width:1344px;margin:0 auto;padding:22px 0 26px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;color:var(--muted);font-size:.75rem}.footer-brand{font-weight:750;color:var(--ink)}.footer-brand span{color:var(--muted);font-weight:400;margin-left:10px}.play-view{max-width:1280px;margin:auto;padding:28px 0 42px}.play-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:27px;min-width:0}.play-heading h1{font-size:1.12rem;letter-spacing:-.4px;text-align:center;overflow-wrap:anywhere;flex:1;line-height:1.65}.back-button{font-size:.875rem;white-space:nowrap;padding:8px 0;background:none;color:var(--muted)}.text-button{background:none;padding:8px 0;color:var(--ink);font-size:.8125rem;text-decoration:underline;text-underline-offset:4px;line-height:1.5}.play-heading .text-button{white-space:nowrap}.workspace{display:grid;grid-template-columns:340px minmax(0,1fr);gap:24px;align-items:start}.setup-panel{border:1px solid var(--line);border-radius:var(--radius);padding:25px;background:white}.setup-panel fieldset{margin:0;padding:0;border:0;min-width:0}.panel-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px;gap:8px}.panel-heading h2{font-size:1.04rem;letter-spacing:-.5px}.count-badge{border-radius:7px;padding:5px 7px;color:#567246;background:#edf2e6;font-size:.75rem;max-width:145px;overflow-wrap:anywhere}.segmented{display:flex;background:#f2f3ee;border-radius:10px;padding:4px;gap:3px;margin-bottom:18px}.segmented button{flex:1;font-size:.8125rem;padding:10px 0;border-radius:7px;background:transparent;white-space:nowrap;min-height:39px}.segmented button[aria-selected=true]{background:white;box-shadow:0 1px 5px #20302514;font-weight:700}.two-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.number-preview{display:flex;align-items:center;justify-content:center;gap:7px;padding:20px 0}.number-ball{border:1px solid var(--line);background:#f7f8f4;border-radius:50%;height:39px;width:39px;display:flex;align-items:center;justify-content:center;font-size:.875rem;font-weight:650;overflow:hidden}.number-more{font-size:.875rem;color:var(--muted)}.helper{font-size:.75rem;line-height:1.7;color:var(--muted);margin-top:10px;overflow-wrap:anywhere}.settings-divider{border-top:1px solid var(--line);margin:24px 0}.switch-line{position:relative;display:flex;flex-direction:row;align-items:center;justify-content:space-between;margin:20px 0 21px;gap:12px;font-size:.875rem;cursor:pointer}.switch-line small{display:block;font-size:.75rem;font-weight:400;color:var(--muted);margin-top:5px;line-height:1.5}.switch-line input{position:absolute;right:0;opacity:0;width:42px;height:26px}.switch-visual{width:40px;height:24px;border-radius:30px;background:#dadfd6;flex-shrink:0;pointer-events:none}.switch-visual:before{content:"";display:block;background:white;border-radius:50%;width:18px;height:18px;margin:3px;transition:transform .18s}.switch-line input:checked+.switch-visual{background:var(--ink)}.switch-line input:checked+.switch-visual:before{transform:translateX(16px)}.switch-line input:focus-visible+.switch-visual{outline:3px solid var(--blue);outline-offset:3px}.speed-line{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}.speed-line select{max-width:160px;font-size:.8125rem;min-height:40px;padding:9px 6px}.draw-summary{margin-top:15px;background:#f6f7f2;border-radius:8px;padding:9px;text-align:center}.game-panel{min-width:0;border:1px solid var(--line);border-radius:var(--radius);background:#fffcfd;overflow:hidden;--stage-accent:#f9bad1;--stage-bg:#ffeff5}.game-panel[data-game=dart]{--stage-accent:var(--lime);--stage-bg:#f5fadf}.game-panel[data-game=munch]{--stage-accent:#c7d3ff;--stage-bg:#edf1ff}.game-panel[data-game=tail]{--stage-accent:#ffd6a7;--stage-bg:#fff3e5}.stage-top{display:flex;align-items:center;justify-content:space-between;padding:25px 30px 0;gap:10px}.stage-eyebrow{font-size:.75rem;letter-spacing:1.6px;color:var(--muted);display:block;margin-bottom:8px}.stage-top h2{font-size:1.5rem;letter-spacing:-.8px}.stage-tools{display:flex;gap:8px}.icon-button{height:38px;min-width:38px;border:1px solid var(--line);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:transparent;font-size:1.1rem;padding:0}.icon-button[aria-pressed=true]{background:var(--ink);color:white;border-color:var(--ink)}.stage{height:400px;position:relative;margin:12px 20px 0;min-width:0;isolation:isolate}.stage canvas{width:100%;height:calc(100% - 40px);display:block}.stage-caption{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:8px;color:var(--muted);font-size:.8125rem;min-height:28px;text-align:center;line-height:1.5}.status-dot{background:var(--pink);width:6px;height:6px;border-radius:50%;flex-shrink:0}.stage-action{padding:4px 30px 26px;text-align:center}.stage-action>.helper{margin:6px 0 17px;font-size:.75rem}.stage-action>.primary{width:100%;font-size:1.06rem;min-height:57px;position:relative;border-radius:13px}.stage-action>.primary>span:first-child{font-size:1.6rem;font-weight:400}.start-arrow{position:absolute;right:20px;font-size:1.3rem}.run-actions{display:flex;justify-content:center;gap:28px;margin-top:8px}.form-error{background:#fff0ef;color:#b03731;border:1px solid #f2c5be;border-radius:9px;padding:12px;margin-bottom:14px;font-size:.875rem;line-height:1.6;overflow-wrap:anywhere}.manual-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;font-size:.75rem;color:var(--muted)}.manual-toolbar .text-button{font-size:.75rem}.entry-rows{display:flex;flex-direction:column;gap:6px}.entry-row{display:grid;grid-template-columns:24px minmax(0,1fr) 28px;align-items:center;gap:6px}.entry-row>span{font-size:.75rem;color:var(--muted);text-align:center}.entry-row input{min-height:36px;padding:7px 9px;font-size:.875rem}.entry-row button{font-size:1.2rem;color:var(--muted);padding:2px;background:none;border-radius:6px;height:34px}.entry-pagination,.result-pagination{display:flex;justify-content:center;align-items:center;gap:16px;font-size:.75rem;color:var(--muted);margin:12px 0}.entry-pagination .icon-button{height:28px;min-width:28px;font-size:.875rem}.file-drop{position:relative;padding:18px 10px;border:1px dashed #c9d2c2;border-radius:12px;background:#f7f9f2;align-items:center;cursor:pointer;text-align:center;margin-bottom:14px;gap:8px}.file-drop strong{font-size:.8125rem}.file-drop>span:last-of-type{font-size:.75rem;font-weight:400;color:var(--muted);overflow-wrap:anywhere;width:100%}.upload-symbol{font-size:1.8rem;font-weight:400}.file-drop input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.file-drop:focus-within{outline:3px solid var(--blue);outline-offset:2px}.file-drop.dragging{background:#e6eecf;border-color:var(--ink)}.inline-field{gap:7px;font-size:.75rem;margin-top:12px}.inline-field select{font-size:.8125rem}.check-line{flex-direction:row;align-items:center;gap:8px;font-size:.8125rem;margin-top:14px}.results{margin-top:28px;border:1px solid var(--line);border-radius:var(--radius);background:white;padding:30px;scroll-margin-top:20px;outline-offset:4px}.results-header{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:24px}.results-header .eyebrow{color:#a63762}.results-header h2{font-size:1.5rem;letter-spacing:-.8px;margin-top:10px}.results-header p{font-size:.875rem;color:var(--muted);margin-top:9px;line-height:1.6;overflow-wrap:anywhere}.result-tools{display:flex;gap:8px;flex-shrink:0}.result-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.result-card{border:1px solid #efceda;border-radius:14px;padding:19px;background:#fff7fa;min-width:0;position:relative}.result-card:nth-child(3n+2){background:#f5f8e8;border-color:#dde6c4}.result-card:nth-child(3n+3){background:#f0f3ff;border-color:#dce3f7}.result-card .pick-meta{font-size:.75rem;color:var(--muted);display:block;margin-bottom:10px}.result-card strong{display:block;font-size:1.6rem;font-weight:800;letter-spacing:-.8px;overflow-wrap:anywhere;white-space:pre-wrap;line-height:1.45}.result-card .pick-order{position:absolute;right:16px;top:15px;font-size:.8125rem;opacity:.4}.result-footnote{text-align:center;font-size:.75rem;color:var(--muted);margin-top:17px;line-height:1.6}.result-pagination{margin-top:22px}.stage-burst{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2}.confetti-piece{position:absolute;top:8%;width:9px;height:14px;border-radius:2px;animation:celebrate 1s ease-out forwards}@keyframes celebrate{0%{opacity:0;transform:translate(0,-10px) rotate(0)}20%{opacity:1}100%{opacity:0;transform:translate(var(--drift),290px) rotate(var(--spin))}}.game-panel.is-running .status-dot{background:#78a54e}.game-panel.is-result .stage-caption{color:var(--ink);font-weight:700}.game-panel.is-result .status-dot{background:var(--ink)}dialog{border:1px solid var(--line);border-radius:22px;padding:0;width:min(520px,calc(100% - 30px));color:var(--ink);box-shadow:0 30px 100px #14201630}dialog::backdrop{background:#1c282168;backdrop-filter:blur(5px)}.dialog-content{padding:28px;display:flex;flex-direction:column;gap:18px}.dialog-heading{display:flex;align-items:center;justify-content:space-between;gap:15px}.dialog-heading h2{font-size:1.25rem;letter-spacing:-.5px}.dialog-content p{font-size:.875rem;color:var(--muted);line-height:1.6}.dialog-content textarea{resize:vertical;line-height:1.7;font-size:1rem}.dialog-actions{display:flex;justify-content:flex-end;gap:10px}.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--ink);color:white;box-shadow:0 5px 30px #1112;border-radius:12px;padding:15px 24px;font-size:.875rem;z-index:20;max-width:calc(100% - 30px);width:max-content;line-height:1.6}.noscript{margin:30px;padding:30px;background:#fff2c9}.result-list:not(:has(.result-card:nth-child(2))){grid-template-columns:1fr}.result-list:not(:has(.result-card:nth-child(2))) .result-card{text-align:center;padding:30px}.result-list:not(:has(.result-card:nth-child(2))) .result-card strong{font-size:clamp(2rem,4vw,3.4rem)}body[data-reduced=true] *,body[data-reduced=true] *:before{animation-duration:.001ms!important;transition:none!important;scroll-behavior:auto!important}
+body[data-app-ready=false]>.header,body[data-app-ready=false]>main,body[data-app-ready=false]>.footer{display:none}.launch-help{max-width:720px;margin:9vh auto;padding:32px;line-height:1.8}.launch-help h1{font-size:1.8rem;letter-spacing:-.7px;margin:15px 0}.launch-help p,.launch-help li{font-size:1rem}.launch-help ol{padding-left:23px;margin:24px 0}.launch-help li{margin:12px 0}.launch-help a{text-decoration:none}.launch-help pre{font-size:.8125rem;white-space:pre-wrap;overflow-wrap:anywhere;background:#fff0ef;border-radius:10px;padding:12px}.usage-section{display:flex;flex-direction:column;gap:12px;padding-top:17px;border-top:1px solid var(--line)}.usage-section h3{font-size:1rem}.usage-section>a{font-size:.875rem;color:var(--ink);text-underline-offset:4px}.usage-section .helper{margin:0}.runtime-status{background:#edf2e6;color:#344f2b!important;border-radius:9px;padding:11px 12px;font-size:.8125rem!important}.compact-drop{padding:13px;margin:0;min-height:48px}.dialog-content a.button{text-decoration:none}.dialog-content{max-height:85dvh;overflow-y:auto}#download-html-link{cursor:pointer}.header-right{gap:14px}
 @media(min-width:1600px){.home-view,.footer{max-width:1344px}.game-grid{gap:24px}.card-art{height:250px}.home-intro{padding-top:40px;padding-bottom:44px}.home-view{padding-top:45px}}
 @media(max-width:1440px){.home-view,.footer{margin-left:48px;margin-right:48px}.play-view{margin-left:48px;margin-right:48px}.time-chip{font-size:.75rem;padding:4px 6px}.game-card{padding:18px 16px 21px}.card-bottom p{font-size:.75rem}.card-arrow{width:34px;height:34px}.card-art{height:205px}}
 @media(max-width:1150px){.game-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.card-art{height:200px}.card-top{padding:0 5px}.card-bottom{padding:0 5px}.card-bottom h2{font-size:1.5rem}.card-bottom p{font-size:.875rem}.card-arrow{height:40px;width:40px}.host-box{width:290px}.home-intro{gap:24px}.home-intro h1{font-size:2.2rem}.workspace{grid-template-columns:310px minmax(0,1fr);gap:18px}.setup-panel{padding:21px}.stage{height:400px;margin-left:10px;margin-right:10px}.stage-top{padding-left:22px;padding-right:22px}.stage-action{padding-left:22px;padding-right:22px}.play-view{margin-left:32px;margin-right:32px}.header{padding-left:32px;padding-right:32px}.home-view,.footer{margin-left:32px;margin-right:32px}.result-tools{flex-wrap:wrap;justify-content:flex-end}.result-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -18,11 +21,20 @@
 @media(prefers-reduced-motion:reduce){*,*:before{animation-duration:.001ms!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
-<body>
+<body data-app-ready="false">
+  <section id="launch-help" class="launch-help" aria-labelledby="launch-heading">
+    <span class="brand-mark" aria-hidden="true">✳</span>
+    <h1 id="launch-heading">파일에 게임은 모두 들어 있어요</h1>
+    <p id="launch-message">이 화면이 계속 보인다면 지금 앱이 HTML을 미리보기로 열었거나 JavaScript 실행을 허용하지 않는 상태입니다. JavaScript를 따로 내려받거나 설치할 필요는 없습니다.</p>
+    <ol><li><strong>PC</strong> — 파일을 저장한 뒤 마우스 오른쪽 버튼 → 연결 프로그램 → Chrome 또는 Edge로 여세요.</li><li><strong>모바일</strong> — 아래 웹 버전을 Safari 또는 Chrome에서 여세요. 실행·저장 도움말에서 오프라인 준비와 저장한 HTML 불러오기를 할 수 있습니다.</li></ol>
+    <a class="button primary" href="https://lucky-draw-antisdream.skn29final4team.chatgpt.site" target="_blank" rel="noopener">브라우저에서 웹 버전 열기 ↗</a>
+    <p class="helper">웹 버전의 첫 실행에는 인터넷과 소유자 로그인이 필요합니다. 파일 미리보기 앱의 실행 제한은 HTML 파일에서 바꿀 수 없습니다.</p>
+    <pre id="launch-detail" hidden></pre>
+  </section>
   <a class="skip-link" href="#main">본문으로 이동</a>
   <header class="header">
     <button class="brand" id="home-button" aria-label="럭키드로우 게임 선택으로"><span class="brand-mark" aria-hidden="true">✳</span> lucky draw<span class="brand-dot">.</span></button>
-    <div class="header-right"><span class="offline-note"><i></i> 어디서든, 가볍게</span><button id="save-html" class="button quiet compact"><span aria-hidden="true">↓</span> HTML 저장</button></div>
+    <div class="header-right"><span class="offline-note"><i></i> 어디서든, 가볍게</span><button id="save-html" class="button quiet compact"><span aria-hidden="true">↓</span> HTML 저장</button><button id="usage-help" class="icon-button" aria-label="실행·저장 도움말">?</button></div>
   </header>
   <main id="main">
     <section id="home-view" class="home-view" aria-labelledby="home-heading">
@@ -91,9 +103,49 @@
   <footer class="footer"><span class="footer-brand">lucky draw. <span>작은 선택을 즐겁게.</span></span><span>설치 없이 · 인터넷 없이 · 우리끼리</span></footer>
   <dialog id="bulk-dialog" aria-labelledby="bulk-heading"><form method="dialog" class="dialog-content"><div class="dialog-heading"><h2 id="bulk-heading">후보를 한 번에 넣기</h2><button value="cancel" class="icon-button" aria-label="닫기">×</button></div><p>한 줄에 한 명씩 입력해주세요. 쉼표는 이름의 일부로 유지해요.</p><textarea id="bulk-text" rows="10" placeholder="김하늘&#10;이바다&#10;박별" aria-label="후보 목록"></textarea><label class="check-line"><input id="bulk-append" type="checkbox"> 기존 후보에 이어서 추가하기</label><div class="dialog-actions"><button value="cancel" class="button quiet">취소</button><button id="bulk-apply" type="button" class="button primary">후보 적용 →</button></div></form></dialog>
   <dialog id="owner-dialog" aria-labelledby="owner-heading"><form method="dialog" class="dialog-content"><div class="dialog-heading"><h2 id="owner-heading">우리만의 이름으로</h2><button value="cancel" class="icon-button" aria-label="닫기">×</button></div><label>럭키드로우 주최자 이름<input id="owner-edit" type="text" placeholder="우리" autocomplete="off"></label><p>한글, 영어, 긴 이름도 그대로 쓸 수 있어요.</p><button id="owner-apply" value="apply" class="button primary">이름 적용 →</button></form></dialog>
+  <dialog id="usage-dialog" aria-labelledby="usage-heading"><div class="dialog-content"><div class="dialog-heading"><h2 id="usage-heading">어디서든 다시 열기</h2><button id="usage-close" class="icon-button" aria-label="도움말 닫기">×</button></div><p class="runtime-status" id="runtime-status" role="status">실행 환경 확인 중</p><div class="usage-section"><h3>PC에서 HTML 하나로</h3><p>HTML 저장으로 받은 파일을 Chrome·Edge·Firefox·Safari 등 JavaScript가 실행되는 브라우저에서 여세요. 별도 설치나 인터넷 연결은 필요하지 않습니다.</p></div><div class="usage-section"><h3>모바일에서 오프라인으로</h3><p>웹 버전을 Safari 또는 Chrome에서 열고 오프라인 준비를 누르세요. 완료 후 브라우저 메뉴의 홈 화면에 추가를 이용할 수 있습니다.</p><a id="web-version" href="https://lucky-draw-antisdream.skn29final4team.chatgpt.site" target="_blank" rel="noopener">웹 버전 열기 ↗</a><button id="prepare-offline" class="button quiet full">이 기기에서 오프라인 준비</button><p id="offline-status" class="helper" role="status">처음 준비할 때만 인터넷 연결이 필요합니다.</p></div><div class="usage-section"><h3>후보와 설정 가져가기</h3><p>모바일 파일 앱에서 HTML이 실행되지 않으면 아래 버튼으로 저장한 HTML을 불러오세요. 파일의 게임 코드를 실행하지 않고 후보·설정·결과만 복원합니다.</p><label class="file-drop compact-drop" for="restore-file"><strong>저장한 HTML 불러오기</strong><input id="restore-file" type="file" accept=".html,text/html"></label><button id="save-device" class="button quiet full">현재 후보·설정을 이 기기에 저장</button><p id="device-status" class="helper" role="status">이 기기 저장은 웹 버전에서 지원합니다. 설정을 바꾸면 다시 저장해주세요.</p></div></div></dialog>
+  <dialog id="download-dialog" aria-labelledby="download-heading"><div class="dialog-content"><div class="dialog-heading"><h2 id="download-heading">HTML 파일이 준비됐어요</h2><button id="download-close" class="icon-button" aria-label="저장 안내 닫기">×</button></div><p>자동 다운로드가 시작되지 않으면 아래 버튼을 누르세요. 파일 앱의 미리보기에서는 게임이 실행되지 않을 수 있습니다.</p><a id="download-html-link" class="button primary" download="lucky_draw.html">HTML 내려받기 ↓</a><button id="share-html" class="button quiet" hidden>파일로 공유·저장</button><p id="download-status" class="helper" role="status">내려받은 파일은 브라우저로 열거나 웹 버전의 저장한 HTML 불러오기로 복원하세요.</p></div></dialog>
   <div id="toast" class="toast" role="status" hidden></div>
-  <noscript><div class="noscript">추첨을 실행하려면 브라우저 설정에서 JavaScript를 켜주세요.</div></noscript>
   <script id="portable-state" type="application/json">{}</script>
+  <script>/* Small, conservative boot guard: keep useful help visible when the app cannot run. */
+(function () {
+  var complete = false;
+  var blocked = false;
+  var notice = document.getElementById('launch-help');
+  var heading = document.getElementById('launch-heading');
+  var message = document.getElementById('launch-message');
+  var detail = document.getElementById('launch-detail');
+  function fail(text, reason) {
+    if (complete) return;
+    blocked = true;
+    document.body.setAttribute('data-app-ready', 'false');
+    notice.hidden = false;
+    heading.textContent = '이 환경에서는 게임을 시작하지 못했어요';
+    message.textContent = text;
+    detail.textContent = reason || '';
+    detail.hidden = !reason;
+  }
+  window.LuckyBoot = {
+    ready: function () {
+      if (blocked) return;
+      complete = true;
+      notice.hidden = true;
+      document.body.setAttribute('data-app-ready', 'true');
+    },
+    fail: fail
+  };
+  window.addEventListener('error', function (event) {
+    if (!complete) fail('필요한 코드는 HTML 안에 모두 들어 있습니다. 파일 미리보기를 닫고 최신 브라우저에서 열어주세요.', event.message || '시작 중 오류');
+  });
+  var missing = [];
+  if (typeof BigInt !== 'function') missing.push('큰 정수 계산');
+  if (!window.crypto || !window.crypto.getRandomValues) missing.push('안전한 무작위 추첨');
+  if (!document.createElement('canvas').getContext('2d')) missing.push('게임 화면 그리기');
+  if (!window.FileReader || !window.Blob || !window.URL || !window.URL.createObjectURL) missing.push('파일 읽기 및 저장');
+  if (missing.length) fail('이 브라우저가 게임에 필요한 기능을 지원하지 않습니다. 최신 Chrome, Edge, Safari 또는 Firefox에서 열어주세요.', '지원되지 않는 기능: ' + missing.join(', '));
+  else message.textContent = '파일 안에 포함된 게임을 시작하고 있어요. 이 화면이 계속 보이면 아래의 실행 방법을 확인해주세요.';
+}());
+</script>
   <script>(() => {
 'use strict';
 /* Pure drawing and import rules. This module is also embedded in index.html. */
@@ -224,6 +276,39 @@ function formatCount(value) {
   return s.length > 15 ? `${s.slice(0, 3)}… (${s.length}자리)` : n.toLocaleString('ko-KR');
 }
 
+function readPortableHTML(html) {
+  // Extract only the known JSON data block. Never parse or execute imported HTML.
+  const match = String(html).match(/<script\b(?=[^>]*\bid\s*=\s*["']portable-state["'])[^>]*>([\s\S]*?)<\/script\s*>/i);
+  if (!match) throw new Error('럭키드로우의 HTML 저장으로 만든 파일을 선택해주세요.');
+  let data;
+  try { data = JSON.parse(match[1]); } catch { throw new Error('저장된 후보 정보를 읽을 수 없습니다. 파일을 다시 저장해주세요.'); }
+  return normalizePortable(data);
+}
+
+function normalizePortable(input) {
+  if (!input || input.version !== 1 || !input.config || typeof input.config !== 'object') throw new Error('후보와 설정이 저장된 럭키드로우 HTML이 아닙니다.');
+  const config = {}, source = input.config;
+  for (const key of ['owner','start','count','people','rounds']) if (typeof source[key] === 'string') config[key] = source[key];
+  for (const key of ['repeat','reduced']) if (typeof source[key] === 'boolean') config[key] = source[key];
+  for (const key of ['manual','csvEntries']) {
+    if (source[key] !== undefined && (!Array.isArray(source[key]) || !source[key].every(value=>typeof value==='string'))) throw new Error('저장된 후보 목록 형식이 올바르지 않습니다.');
+    if (source[key]) config[key] = source[key].slice();
+  }
+  if (['numbers','manual','csv'].includes(source.mode)) config.mode = source.mode;
+  if (['roulette','dart','munch','tail'].includes(source.game)) config.game = source.game;
+  if (['1800','3400','5000'].includes(source.duration)) config.duration = source.duration;
+  let lastResult = null;
+  if (input.lastResult !== null && input.lastResult !== undefined) {
+    const result=input.lastResult;
+    if (!Array.isArray(result.draws) || !result.draws.length || !result.draws.every(draw=>draw&&typeof draw.label==='string'&&typeof draw.id==='string')) throw new Error('저장된 추첨 결과 형식이 올바르지 않습니다.');
+    for (const key of ['perRound','rounds','candidateCount']) if (typeof result[key]!=='string'||!/^\d+$/.test(result[key])||BigInt(result[key])<1n) throw new Error('저장된 결과의 인원 정보를 확인해주세요.');
+    if (BigInt(result.perRound)*BigInt(result.rounds)!==BigInt(result.draws.length)) throw new Error('저장된 결과의 회차와 인원이 일치하지 않습니다.');
+    if (!['roulette','dart','munch','tail'].includes(result.game)||!Number.isFinite(Date.parse(result.at))) throw new Error('저장된 결과 정보를 확인해주세요.');
+    lastResult={draws:result.draws.map(draw=>({label:draw.label,id:draw.id})),perRound:result.perRound,rounds:result.rounds,candidateCount:result.candidateCount,game:result.game,owner:String(result.owner||'우리'),repeat:!!result.repeat,at:result.at};
+  }
+  return {version:1,config,lastResult,resultFresh:input.resultFresh!==false,view:input.view==='play'?'play':'home'};
+}
+
 const $ = id => document.getElementById(id);
 const TAU = Math.PI * 2;
 const PALETTE = ['#ff76ab', '#f9d95f', '#d6ed75', '#91d6b7', '#8ba5f8', '#d4b6eb', '#ffb788', '#f4a2b9'];
@@ -236,6 +321,12 @@ const GAMES = {
 const ENTRY_PAGE_SIZE = 6, RESULT_PAGE_SIZE = 24, DISPLAY_SIZE = 12;
 let portable = {};
 try { portable = JSON.parse($('portable-state').textContent || '{}'); } catch { /* Fall back to an empty setup. */ }
+const DEVICE_STORAGE_KEY = 'lucky-draw.portable.v1';
+const webEnvironment = typeof location !== 'undefined' && /^https?:$/.test(location.protocol);
+const installableLocation = webEnvironment && (/\/$/.test(location.pathname) || /\/index\.html$/.test(location.pathname));
+if (!portable.config && webEnvironment) {
+  try { const saved=localStorage.getItem(DEVICE_STORAGE_KEY);if(saved)portable=normalizePortable(JSON.parse(saved)); } catch { /* Storage can be unavailable or contain an older save. */ }
+}
 const defaults = { owner: '', mode: 'numbers', start: '1', count: '12', people: '1', rounds: '1', repeat: false, duration: '3400', game: 'roulette', reduced: false, manual: ['1','2','3','4','5','6'], csvEntries: [] };
 const state = { ...defaults };
 if (portable.config && typeof portable.config === 'object') {
@@ -249,8 +340,9 @@ if (portable.config && typeof portable.config === 'object') {
 let entryPage = 0, resultPage = 0, csvRows = [], csvFile = null, csvLoadId = 0;
 let running = false, activeRun = null, lastResult = null, resultFresh = true;
 let soundEnabled = false, audioContext = null, toastTimer;
+let htmlDownloadUrl = null, htmlShareFile = null;
 let stageFrame = { progress: 0, items: [], winner: 0, ended: false };
-const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+const motionPreference = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : {matches:false};
 const reducedMotion = () => state.reduced || motionPreference.matches;
 const nextPaint = () => new Promise(resolve => setTimeout(resolve, 0));
 
@@ -393,6 +485,7 @@ async function loadCsv(file) {
 }
 function selectGame(game, changeView = true) {
   if (running || !Object.hasOwn(GAMES, game)) return;
+  if (lastResult && lastResult.game !== game) markChanged();
   state.game = game;
   $('game-title').textContent = GAMES[game].title; $('stage-eyebrow').textContent = GAMES[game].eyebrow;
   $('start-label').textContent = GAMES[game].action; $('game-canvas').setAttribute('aria-label', `${GAMES[game].title} 추첨 화면`);
@@ -410,6 +503,7 @@ function setRunning(value) {
   running = value; $('settings').disabled = value; $('start-button').disabled = value;
   $('home-button').disabled = value; $('back-button').disabled = value; $('edit-owner').disabled = value;
   $('save-html').disabled = value; $('run-actions').hidden = !value;
+  $('restore-file').disabled = value; $('save-device').disabled = value;
   document.querySelector('.game-panel').classList.toggle('is-running', value);
   $('game-canvas').setAttribute('aria-busy', String(value));
 }
@@ -488,7 +582,7 @@ function finishRun(run) {
   if (!reducedMotion()) burst();
   tone(523.25, .14, .045); setTimeout(() => tone(659.25, .16, .035), 90); setTimeout(() => tone(783.99, .23, .035), 180);
   $('results').focus({ preventScroll: true });
-  $('results').scrollIntoView({ behavior: reducedMotion() ? 'instant' : 'smooth', block: 'nearest' });
+  $('results').scrollIntoView({ behavior: 'instant', block: 'start' });
 }
 function cancelDraw() {
   if (!activeRun) return;
@@ -538,7 +632,10 @@ function line(ctx, points, color, width = 2) {
   ctx.beginPath(); points.forEach(([x,y], i) => i ? ctx.lineTo(x,y) : ctx.moveTo(x,y)); ctx.strokeStyle = color; ctx.lineWidth = width; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.stroke();
 }
 function roundBox(ctx, x, y, w, h, r, fill, stroke = null) {
-  ctx.beginPath(); ctx.roundRect(x,y,w,h,r); if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+  ctx.beginPath();
+  if(ctx.roundRect)ctx.roundRect(x,y,w,h,r);
+  else{const radius=Math.min(r,w/2,h/2);ctx.moveTo(x+radius,y);ctx.arcTo(x+w,y,x+w,y+h,radius);ctx.arcTo(x+w,y+h,x,y+h,radius);ctx.arcTo(x,y+h,x,y,radius);ctx.arcTo(x,y,x+w,y,radius);ctx.closePath();}
+  if (fill) { ctx.fillStyle = fill; ctx.fill(); }
   if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1.5; ctx.stroke(); }
 }
 function canvasText(ctx, text, x, y, size = 16, color = '#202721', weight = 700, align = 'center', maxWidth = null) {
@@ -684,12 +781,13 @@ function tone(frequency,duration,volume){
 function updateSound(){const label=soundEnabled?'효과음 끄기':'효과음 켜기';$('sound-toggle').setAttribute('aria-pressed',String(soundEnabled));$('sound-toggle').setAttribute('aria-label',label);$('sound-toggle').title=label;}
 function updateMotion(){document.body.dataset.reduced=String(reducedMotion());$('motion-toggle').setAttribute('aria-pressed',String(reducedMotion()));$('motion-toggle').title=reducedMotion()?'간결한 움직임 사용 중':'간결한 움직임';}
 function download(blob,name){const url=URL.createObjectURL(blob),a=el('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);}
+function getPortableSnapshot(){configFromInputs();return {version:1,config:{...state},lastResult,resultFresh,view:$('play-view').hidden?'home':'play'};}
 async function exportCsv(){
   if(!lastResult)return;
   const snapshot=lastResult, parts=['\uFEFF'+['회차','회차 내 순서','이름 또는 번호','후보 ID','게임','추첨 시각'].map(csvCell).join(',')+'\r\n'];
   const perRound=BigInt(snapshot.perRound);
   for(let offset=0;offset<snapshot.draws.length;offset+=2000){let block='';for(let i=offset;i<Math.min(offset+2000,snapshot.draws.length);i++){const row=snapshot.draws[i];block+=[BigInt(i)/perRound+1n,BigInt(i)%perRound+1n,row.label,row.id,GAMES[snapshot.game].title,snapshot.at].map(csvCell).join(',')+'\r\n';}parts.push(block);await nextPaint();}
-  download(new Blob(parts,{type:'text/csv;charset=utf-8'}),'lucky-draw-results.csv');toast('모든 회차의 결과를 CSV로 저장했어요.');
+  download(new Blob(parts,{type:'text/csv;charset=utf-8'}),'lucky-draw-results.csv');toast('CSV 다운로드를 요청했어요. 내려받은 파일을 확인해주세요.');
 }
 async function copyResults(){
   if(!lastResult)return;
@@ -701,21 +799,82 @@ async function copyResults(){
 function exportHtml(){
   if(running)return;
   try{
-    configFromInputs();
-  const snapshot={version:1,config:{...state},lastResult,resultFresh,view:$('play-view').hidden?'home':'play'};
+    const snapshot=getPortableSnapshot();
     const clone=document.documentElement.cloneNode(true);
     clone.querySelector('#portable-state').textContent=safeJSON(snapshot);
     clone.querySelectorAll('dialog').forEach(dialog=>dialog.removeAttribute('open'));
     clone.querySelector('#toast').hidden=true;clone.querySelector('#stage-burst').replaceChildren();
+    clone.querySelector('body').setAttribute('data-app-ready','false');clone.querySelector('#launch-help').hidden=false;
+    clone.querySelector('#download-html-link').removeAttribute('href');
+    clone.querySelectorAll('[data-hosted-asset]').forEach(asset=>asset.remove());
     const html='<!doctype html>\n'+clone.outerHTML;
-    download(new Blob([html],{type:'text/html;charset=utf-8'}),'lucky_draw.html');
-    toast('후보·설정·마지막 결과를 담은 HTML을 저장했어요.');
+    const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+    if(htmlDownloadUrl){const old=htmlDownloadUrl;setTimeout(()=>URL.revokeObjectURL(old),30000);}
+    htmlDownloadUrl=URL.createObjectURL(blob);$('download-html-link').href=htmlDownloadUrl;
+    htmlShareFile=typeof File==='function'?new File([blob],'lucky_draw.html',{type:'text/html'}):null;
+    let shareable=false;try{shareable=!!(htmlShareFile&&navigator.canShare&&navigator.canShare({files:[htmlShareFile]}));}catch{}
+    $('share-html').hidden=!shareable;$('download-status').textContent='후보·설정·마지막 결과를 담았습니다. 내려받은 파일을 확인해주세요.';
+    $('download-dialog').showModal();$('download-html-link').click();
   }catch{toast('파일을 담을 메모리가 부족해요. 후보나 결과 수를 줄여주세요.');}
 }
 
+function writeStateInputs(){
+  $('owner').value=state.owner;$('number-start').value=state.start;$('number-count').value=state.count;
+  $('people').value=state.people;$('rounds').value=state.rounds;$('repeat').checked=state.repeat;$('duration').value=state.duration;
+}
+function applyPortableSnapshot(snapshot){
+  if(running)throw new Error('추첨이 끝난 뒤 파일을 불러와주세요.');
+  const checked=normalizePortable(snapshot);
+  Object.assign(state,{...defaults,manual:['1','2','3','4','5','6'],csvEntries:[]},checked.config);
+  lastResult=null;entryPage=0;resultPage=0;csvRows=[];csvFile=null;csvLoadId++;
+  $('results').hidden=true;$('csv-options').hidden=true;$('csv-filename').textContent='여기에 파일을 끌어놓아도 돼요';
+  writeStateInputs();
+  if(state.csvEntries.length){csvRows=state.csvEntries.map(label=>[label]);$('csv-header').checked=false;$('csv-filename').textContent='HTML에서 불러온 후보';refreshCsvColumns();}
+  setMode(state.mode);selectGame(state.game,checked.view==='play');if(checked.view!=='play')goHome();
+  lastResult=checked.lastResult;resultFresh=checked.resultFresh;updateOwner();updateMotion();
+  if(lastResult)renderResults();
+}
+async function restoreSavedFile(file){
+  if(!file||running)return;
+  try{const text=typeof file.text==='function'?await file.text():await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('파일을 읽지 못했어요.'));reader.readAsText(file,'utf-8');});
+    const snapshot=readPortableHTML(text);applyPortableSnapshot(snapshot);$('usage-dialog').close();toast('저장된 후보·설정·결과를 불러왔어요.');
+  }catch(error){$('device-status').textContent=error.message;}
+  $('restore-file').value='';
+}
+function showUsage(){
+  $('runtime-status').textContent='실행 확인: JavaScript · 게임 화면 · 무작위 추첨 · 파일 읽기';
+  $('save-device').disabled=running||!webEnvironment;
+  $('prepare-offline').disabled=!installableLocation||!window.isSecureContext||!('serviceWorker' in navigator);
+  if(!webEnvironment)$('offline-status').textContent='현재 HTML은 파일 안의 코드로 작동합니다. 모바일 오프라인 준비는 웹 버전에서 이용하세요.';
+  else if($('prepare-offline').disabled)$('offline-status').textContent='이 주소에서는 오프라인 준비가 지원되지 않아요. HTTPS 웹 버전을 사용해주세요.';
+  $('usage-dialog').showModal();
+}
+async function prepareOffline(){
+  if(!installableLocation||!window.isSecureContext||!('serviceWorker' in navigator))return;
+  $('prepare-offline').disabled=true;$('offline-status').textContent='이 기기에 게임을 준비하고 있어요…';
+  try{
+    if(!document.querySelector('link[data-hosted-asset]')){const manifest=el('link');manifest.rel='manifest';manifest.href='./app.webmanifest';manifest.dataset.hostedAsset='manifest';document.head.append(manifest);}
+    const registration=await navigator.serviceWorker.register('./sw.js',{scope:'./'});
+    const worker=registration.installing||registration.waiting||registration.active;
+    if(!worker)throw new Error('준비를 시작하지 못했어요.');
+    if(worker.state!=='activated')await new Promise((resolve,reject)=>{
+      const timer=setTimeout(()=>{worker.removeEventListener('statechange',changed);reject(new Error('준비 시간이 초과됐어요.'));},20000);
+      function changed(){if(worker.state==='activated'||worker.state==='redundant'){clearTimeout(timer);worker.removeEventListener('statechange',changed);worker.state==='activated'?resolve():reject(new Error('앱 파일을 저장하지 못했어요.'));}}
+      worker.addEventListener('statechange',changed);changed();
+    });
+    $('offline-status').textContent='오프라인 준비 완료. 브라우저 메뉴에서 홈 화면에 추가하세요. 후보·설정은 아래 버튼으로 별도 저장할 수 있어요.';
+    $('prepare-offline').textContent='오프라인 파일 다시 준비';
+  }catch{$('offline-status').textContent='오프라인 준비를 완료하지 못했어요. 웹 버전에 로그인했는지, 인터넷 연결이 있는지 확인한 뒤 다시 시도해주세요.';}
+  $('prepare-offline').disabled=false;
+}
+function saveOnDevice(){
+  if(!webEnvironment||running)return;
+  try{localStorage.setItem(DEVICE_STORAGE_KEY,safeJSON(getPortableSnapshot()));$('device-status').textContent='현재 후보·설정·마지막 결과를 이 기기에 저장했어요. 설정을 바꾸면 다시 저장해주세요.';}
+  catch{$('device-status').textContent='이 브라우저에서 저장 공간을 사용할 수 없어요. HTML 저장을 이용해주세요.';}
+}
+
 // Bind controls after restoring the portable document's data.
-$('owner').value=state.owner;$('number-start').value=state.start;$('number-count').value=state.count;
-$('people').value=state.people;$('rounds').value=state.rounds;$('repeat').checked=state.repeat;$('duration').value=state.duration;
+writeStateInputs();
 $('settings').disabled=false;$('home-button').disabled=false;$('back-button').disabled=false;$('save-html').disabled=false;$('edit-owner').disabled=false;$('start-button').disabled=false;
 $('run-actions').hidden=true;$('form-error').hidden=true;$('results').hidden=true;
 $('owner').addEventListener('input',()=>{updateOwner();markChanged();});
@@ -741,12 +900,17 @@ $('start-button').addEventListener('click',startDraw);$('cancel-button').addEven
 $('skip-button').addEventListener('click',()=>{if(!activeRun)return;activeRun.skip=true;if(activeRun.computed)finishRun(activeRun);else toast('연출은 건너뛰고, 결과 계산을 마치는 대로 보여드릴게요.');});
 $('sound-toggle').addEventListener('click',()=>{soundEnabled=!soundEnabled;if(soundEnabled)initSound();updateSound();if(soundEnabled)tone(660,.1,.03);});
 $('motion-toggle').addEventListener('click',()=>{state.reduced=!state.reduced;updateMotion();if(motionPreference.matches&&!state.reduced)toast('기기의 움직임 줄이기 설정을 적용하고 있어요.');});
-motionPreference.addEventListener('change',updateMotion);
+if(motionPreference.addEventListener)motionPreference.addEventListener('change',updateMotion);else if(motionPreference.addListener)motionPreference.addListener(updateMotion);
 $('result-prev').addEventListener('click',()=>{resultPage--;renderResults();});$('result-next').addEventListener('click',()=>{resultPage++;renderResults();});
 $('copy-results').addEventListener('click',copyResults);$('export-results').addEventListener('click',()=>exportCsv().catch(()=>toast('결과 파일을 만들지 못했어요. 다시 시도해주세요.')));
 $('save-html').addEventListener('click',exportHtml);
-let resizeFrame;const resizeObserver=new ResizeObserver(()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{renderStage();renderPreviews();});});
-resizeObserver.observe($('game-canvas'));document.querySelectorAll('[data-preview]').forEach(canvas=>resizeObserver.observe(canvas));
+$('usage-help').addEventListener('click',showUsage);$('usage-close').addEventListener('click',()=>$('usage-dialog').close());
+$('restore-file').addEventListener('change',event=>restoreSavedFile(event.target.files[0]));
+$('prepare-offline').addEventListener('click',prepareOffline);$('save-device').addEventListener('click',saveOnDevice);
+$('download-close').addEventListener('click',()=>$('download-dialog').close());
+$('share-html').addEventListener('click',async()=>{try{await navigator.share({files:[htmlShareFile]});$('download-status').textContent='파일 공유 창에서 저장 위치를 확인해주세요.';}catch(error){if(error.name!=='AbortError')$('download-status').textContent='파일 공유를 지원하지 않아요. HTML 내려받기를 이용해주세요.';}});
+let resizeFrame;function scheduleResize(){cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{renderStage();renderPreviews();});}
+if(typeof ResizeObserver==='function'){const resizeObserver=new ResizeObserver(scheduleResize);resizeObserver.observe($('game-canvas'));document.querySelectorAll('[data-preview]').forEach(canvas=>resizeObserver.observe(canvas));}else window.addEventListener('resize',scheduleResize);
 if(state.csvEntries.length){csvRows=state.csvEntries.map(label=>[label]);$('csv-header').checked=false;$('csv-filename').textContent='HTML에 저장된 후보';refreshCsvColumns();}
 setMode(state.mode);selectGame(state.game,portable.view==='play');updateOwner();updateSound();updateMotion();
 if(portable.view!=='play')goHome();
@@ -758,6 +922,7 @@ try{
   }
 }catch{lastResult=null;}
 requestAnimationFrame(()=>{renderStage();renderPreviews();});
+if(window.LuckyBoot)window.LuckyBoot.ready();
 
 })();</script>
 </body>
