@@ -1,6 +1,6 @@
 # lucky draw. — 나만의 럭키드로우
 
-룰렛, 다트, 냠냠 레이스, 꼬리잡기 중 원하는 게임으로 이름과 번호를 뽑습니다. **게임 코드·화면·초기 데이터가 `index.html` 하나에 들어 있습니다.** PC에서는 JavaScript를 실행할 수 있는 브라우저로 파일을 열어 사용합니다. 모바일에서는 아래 웹 버전을 한 번 준비한 뒤 오프라인으로 이용할 수 있습니다.
+룰렛, 다트, 냠냠 레이스, 꼬리잡기 중 원하는 게임으로 이름과 번호를 뽑습니다. **게임 코드·화면·초기 데이터가 `index.html` 하나에 들어 있습니다.** PC에서는 JavaScript를 실행할 수 있는 브라우저로 파일을 열어 사용합니다. 모바일에서는 아래 웹 버전을 Safari 또는 Chrome으로 여세요. 오프라인 사용은 해당 브라우저와 웹 주소에서 준비가 완료된 경우에 지원합니다.
 
 **[웹 버전 열기](https://lucky-draw-antisdream.skn29final4team.chatgpt.site)** — 현재 소유자 전용이며, 첫 접속에는 인터넷과 소유자 로그인이 필요합니다. 파일로 실행하는 HTML에는 서버 로그인이나 프로그램 설치가 필요하지 않습니다.
 
@@ -28,6 +28,8 @@ JavaScript가 파일에서 빠진 것이 아닙니다. HTML·CSS·JavaScript를 
 
 ## 휴대전화에서 준비하고 오프라인으로 실행하기
 
+**현재 확인 상태:** 모바일 크기의 Chromium에서 웹 게임은 실행됐고, 로컬 서버를 끈 뒤 오프라인 추첨도 통과했습니다. 다만 배포 주소에서 오프라인 준비가 실패했고, 검증 브라우저의 오프라인 실행 파일 접근에서 `ERR_BLOCKED_BY_CLIENT`를 확인했습니다. 이 제한이 실제 휴대전화에도 적용되는지는 확인하지 못했습니다. 아래 단계에서 **준비 완료**와 연결을 끊은 재실행을 직접 확인하기 전에는 모바일 웹 버전을 온라인으로 사용하세요.
+
 1. 인터넷이 연결된 상태에서 **[웹 버전](https://lucky-draw-antisdream.skn29final4team.chatgpt.site)**을 iPhone의 Safari 또는 Android의 Chrome에서 엽니다. 소유자 로그인 화면이 나오면 로그인합니다.
 2. 화면 오른쪽 위 **`?` 실행·저장 도움말 → 이 기기에서 오프라인 준비**를 누릅니다.
 3. **오프라인 준비 완료**가 표시될 때까지 기다립니다.
@@ -40,7 +42,7 @@ JavaScript가 파일에서 빠진 것이 아닙니다. HTML·CSS·JavaScript를 
 
 오프라인 준비는 게임 파일을 저장하고, **이 기기에 저장**은 후보·설정·마지막 결과를 저장합니다. 설정이나 결과가 달라지면 다시 저장하세요. 다른 기기로 옮길 때는 **HTML 저장**으로 파일을 만들어 전달합니다.
 
-참고: [Apple의 홈 화면 웹 앱 안내](https://support.apple.com/en-gb/guide/iphone/iphea86e5236/ios), [MDN의 서비스 워커 오프라인 실행 설명](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers). 모바일 화면 크기의 Chromium에서 오프라인 동작을 검증했으며, iPhone·Android 실기기와 홈 화면 설치 자체의 검증은 별도입니다.
+참고: [Apple의 홈 화면 웹 앱 안내](https://support.apple.com/en-gb/guide/iphone/iphea86e5236/ios), [MDN의 서비스 워커 오프라인 실행 설명](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers). 로컬 주소의 모바일 화면 크기 Chromium에서 오프라인 동작을 검증했으며, 배포 주소의 오프라인 준비, iPhone·Android 실기기와 홈 화면 설치 자체는 통과 판정에 포함하지 않습니다.
 
 ## 추첨하는 순서
 

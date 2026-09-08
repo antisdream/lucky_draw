@@ -553,7 +553,7 @@ async function prepareOffline(){
     });
     $('offline-status').textContent='오프라인 준비 완료. 브라우저 메뉴에서 홈 화면에 추가하세요. 후보·설정은 아래 버튼으로 별도 저장할 수 있어요.';
     $('prepare-offline').textContent='오프라인 파일 다시 준비';
-  }catch{$('offline-status').textContent='오프라인 준비를 완료하지 못했어요. 웹 버전에 로그인했는지, 인터넷 연결이 있는지 확인한 뒤 다시 시도해주세요.';}
+  }catch{$('offline-status').textContent='이 브라우저나 웹 주소에서 오프라인 준비를 완료하지 못했어요. Safari 또는 Chrome에서 인터넷 연결과 웹 버전 로그인을 확인해주세요. 준비 완료 전에는 온라인으로 이용해주세요.';}
   $('prepare-offline').disabled=false;
 }
 function saveOnDevice(){
