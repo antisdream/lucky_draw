@@ -8,3 +8,14 @@ dist/
 !.env.example
 .DS_Store
 Thumbs.db
+android/.gradle/
+android/.kotlin/
+android/local.properties
+android/**/build/
+artifacts/
+*.apk
+.signing/
+*.jks
+*.keystore
+*.p12
+*.dpapi
