@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import vm from 'node:vm';
 import { createHash } from 'node:crypto';
+import { minify } from 'terser';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const read = name => readFile(path.join(root, 'src', name), 'utf8');
@@ -11,7 +12,12 @@ const script = `(() => {\n'use strict';\n${core.replace(/^export /gm, '')}\n${po
 new vm.Script(script, { filename: 'lucky-draw.js' });
 new vm.Script(bootstrap, { filename: 'bootstrap.js' });
 if (/<\/script/i.test(script) || /<\/script/i.test(bootstrap) || /<\/style/i.test(css)) throw new Error('Unsafe embedded closing tag');
-const output = template.replace('/* INLINE_CSS */', () => css).replace('/* INLINE_BOOTSTRAP */', () => bootstrap).replace('/* INLINE_JS */', () => script);
+// Minification and identifier mangling make casual editing harder; they do not encrypt code.
+// Do not mangle property names: DOM/native bridges and portable data use stable names.
+const options = {ecma:2022,compress:{passes:2},mangle:true,toplevel:true,format:{comments:false,inline_script:true},sourceMap:false};
+const [gameCode, bootCode] = await Promise.all([minify(script,options),minify(bootstrap,options)]);
+for(const code of [gameCode.code,bootCode.code]){new vm.Script(code);if(/<\/script/i.test(code))throw new Error('Unsafe minified closing tag');}
+const output = template.replace('/* INLINE_CSS */', () => css).replace('/* INLINE_BOOTSTRAP */', () => bootCode.code).replace('/* INLINE_JS */', () => gameCode.code);
 if (/<(?:script|img|iframe|link)\b[^>]*\b(?:src|href)\s*=\s*["'](?:https?:)?\/\//i.test(output)) throw new Error('External runtime asset found');
 await mkdir(path.join(root, 'dist'), { recursive: true });
 await writeFile(path.join(root, 'index.html'), output, 'utf8');

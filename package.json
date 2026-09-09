@@ -1,14 +1,19 @@
 {
   "name": "lucky_draw",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "private": true,
   "description": "HTML 하나로 실행하는 네 가지 럭키드로우",
   "type": "module",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "dev": "node scripts/serve.mjs",
     "test": "node --test tests/*.test.mjs",
     "check": "npm run test && npm run build"
+  },
+  "devDependencies": {
+    "terser": "5.51.2"
   }
 }
