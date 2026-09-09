@@ -6,8 +6,8 @@ import { createHash } from 'node:crypto';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const read = name => readFile(path.join(root, 'src', name), 'utf8');
-const [template, css, bootstrap, core, portable, app] = await Promise.all(['shell.html', 'style.css', 'bootstrap.js', 'core.js', 'portable.js', 'app.js'].map(read));
-const script = `(() => {\n'use strict';\n${core.replace(/^export /gm, '')}\n${portable.replace(/^export /gm, '')}\n${app}\n})();`;
+const [template, css, bootstrap, core, portable, motion, gestures, scenes, app] = await Promise.all(['shell.html', 'style.css', 'bootstrap.js', 'core.js', 'portable.js', 'motion.js', 'gestures.js', 'scenes.js', 'app.js'].map(read));
+const script = `(() => {\n'use strict';\n${core.replace(/^export /gm, '')}\n${portable.replace(/^export /gm, '')}\n${motion.replace(/^export /gm, '')}\n${gestures.replace(/^export /gm, '')}\n${scenes}\n${app}\n})();`;
 new vm.Script(script, { filename: 'lucky-draw.js' });
 new vm.Script(bootstrap, { filename: 'bootstrap.js' });
 if (/<\/script/i.test(script) || /<\/script/i.test(bootstrap) || /<\/style/i.test(css)) throw new Error('Unsafe embedded closing tag');

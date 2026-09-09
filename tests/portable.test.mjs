@@ -29,3 +29,11 @@ test('정의하지 않은 객체 속성은 복원하지 않는다',()=>{
   const value=snapshot();value.config.onLoad='alert(1)';value.config['unexpected']='value';const parsed=normalizePortable(value);
   assert.equal(Object.hasOwn(parsed.config,'onLoad'),false);assert.equal(Object.hasOwn(parsed.config,'unexpected'),false);
 });
+
+test('HTML 내보내기와 불러오기에서 명시적인 애니메이션 선택을 유지한다',()=>{
+  for(const motionMode of ['system','full','reduced']){
+    const value=snapshot();value.config.motionMode=motionMode;
+    const html=`<script id="portable-state" type="application/json">${safeJSON(value)}</script>`;
+    assert.equal(readPortableHTML(html).config.motionMode,motionMode);
+  }
+});

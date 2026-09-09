@@ -12,6 +12,7 @@ export function normalizePortable(input) {
   const config = {}, source = input.config;
   for (const key of ['owner','start','count','people','rounds']) if (typeof source[key] === 'string') config[key] = source[key];
   for (const key of ['repeat','reduced']) if (typeof source[key] === 'boolean') config[key] = source[key];
+  if (['system','full','reduced'].includes(source.motionMode)) config.motionMode = source.motionMode;
   for (const key of ['manual','csvEntries']) {
     if (source[key] !== undefined && (!Array.isArray(source[key]) || !source[key].every(value=>typeof value==='string'))) throw new Error('저장된 후보 목록 형식이 올바르지 않습니다.');
     if (source[key]) config[key] = source[key].slice();
