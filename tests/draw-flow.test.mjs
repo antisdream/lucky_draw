@@ -9,13 +9,13 @@ const [core,app,gestures,motion,portable]=await Promise.all(['core.js','app.js',
 function controller(config={},platform={}) {
   const nodes=new Map(),frames=[];
   let renders=0;
-  function node(id){if(!nodes.has(id))nodes.set(id,{value:'',textContent:'',hidden:true,disabled:false,checked:false,dataset:{},classList:{toggle(){},add(){},remove(){}},setAttribute(){},focus(){},scrollIntoView(){},getBoundingClientRect(){return {width:600,height:360,left:0,top:0}},hasPointerCapture(){return false},releasePointerCapture(){},setPointerCapture(){}});return nodes.get(id);}
+  function node(id){if(!nodes.has(id))nodes.set(id,{value:'',textContent:'',hidden:true,disabled:false,checked:false,dataset:{},attributes:{},classList:{toggle(){},add(){},remove(){}},setAttribute(key,value){this.attributes[key]=value;},focus(){this.focused=true;},scrollIntoView(){},getBoundingClientRect(){return {width:600,height:360,left:0,top:0}},hasPointerCapture(){return false},releasePointerCapture(){},setPointerCapture(){}});return nodes.get(id);}
   const values={owner:'우리 모임', 'number-start':'1','number-count':'12',people:'1',rounds:'1',duration:'3400',...config};
   for(const [key,value] of Object.entries(values))node(key).value=value;
   node('repeat').checked=!!config.repeat;node('portable-state').textContent=JSON.stringify(platform.snapshot||{});
   const storage=platform.storage||new Map();
   const context=vm.createContext({document:{body:{dataset:{}},getElementById:node,querySelector:()=>node('game-panel')},window:{matchMedia:()=>({matches:!!platform.systemReduced})},location:{protocol:'https:',hostname:'appassets.androidplatform.net'},localStorage:{getItem:key=>storage.get(key)||null,setItem:(key,value)=>storage.set(key,value)},crypto:webcrypto,performance,setTimeout:callback=>setTimeout(callback,0),clearTimeout,requestAnimationFrame:fn=>frames.push(fn),recordRender:()=>renders++,console});
-  vm.runInContext(`${core.replace(/^export /gm,'')}\n${gestures.replace(/^export /gm,'')}\n${motion.replace(/^export /gm,'')}\n${portable.replace(/^export /gm,'')}\n${app.slice(0,app.indexOf('// Bind controls'))}\nrenderStage=recordRender;renderResults=()=>{};burst=()=>{};tone=()=>{};updateStats=()=>{};toast=()=>{};globalThis.api={startDraw,cancelDraw,assistGesture,pointerDown,pointerEnd,changeMotionMode,setGame:g=>state.game=g,motion:()=>({mode:state.motionMode,reduced:reducedMotion()}),status:()=>({running,lastResult,activeRun}),fastForward:()=>{if(activeRun){activeRun.skip=true;if(activeRun.computed)finishRun(activeRun);}}};`,context);
+  vm.runInContext(`${core.replace(/^export /gm,'')}\n${gestures.replace(/^export /gm,'')}\n${motion.replace(/^export /gm,'')}\n${portable.replace(/^export /gm,'')}\n${app.slice(0,app.indexOf('// Bind controls'))}\nrenderStage=recordRender;renderResults=()=>{};burst=()=>{};tone=()=>{};updateStats=()=>{};toast=()=>{};globalThis.api={saveOnDevice,updateDeviceStatus,markChanged,startDraw,cancelDraw,assistGesture,pointerDown,pointerEnd,changeMotionMode,setGame:g=>state.game=g,motion:()=>({mode:state.motionMode,reduced:reducedMotion()}),status:()=>({running,lastResult,activeRun}),fastForward:()=>{if(activeRun){activeRun.skip=true;if(activeRun.computed)finishRun(activeRun);}}};`,context);
   return {api:context.api,nodes,storage,renderCount:()=>renders,tickAt(ms){const at=(context.api.status().activeRun?.startedAt||0)+ms;const batch=frames.splice(0);for(const frame of batch)frame(at);},tick(){const batch=frames.splice(0);for(const frame of batch)frame(performance.now()+10000);},finish(){while(frames.length)frames.shift()(performance.now()+10000);}};
 }
 for(const game of ['roulette','dart','munch','tail'])test(`${game}: 3회에 2명씩 선정한 결과와 회차 정보가 일치한다`,async()=>{
@@ -119,4 +119,33 @@ test('이전 HTML의 간결 설정과 새 HTML의 전체 설정을 호환 복원
   for(const [config,expected] of [[{reduced:true},'reduced'],[{reduced:false},'system'],[{motionMode:'full',reduced:false},'full']]){
     const env=controller({}, {systemReduced:true,snapshot:{version:1,config}});assert.equal(env.api.motion().mode,expected);
   }
+});
+
+for (const [field,value] of [['number-start','abc'],['number-count','0'],['people','1.5'],['rounds','0']]) test(`${field}: 입력 오류가 해당 필드와 연결되고 추첨은 시작되지 않는다`,async()=>{
+  const env=controller({[field]:value});await env.api.startDraw();
+  assert.equal(env.api.status().running,false);
+  assert.equal(env.nodes.get(field).attributes['aria-invalid'],'true');
+  assert.equal(env.nodes.get(field).focused,true);
+  assert.equal(env.nodes.get(`${field}-error`).hidden,false);
+  assert.equal(env.nodes.get('draw-phase').textContent,'입력 확인');
+});
+test('수동 기기 저장 이후 변경은 미저장으로 표시하며 기존 저장을 덮어쓰지 않는다',()=>{
+  const env=controller();env.api.saveOnDevice();
+  const original=env.storage.get('lucky-draw.portable.v1');
+  assert.match(env.nodes.get('storage-state').textContent,/기기 저장됨/);
+  const restarted=controller({}, {storage:env.storage});restarted.api.updateDeviceStatus(true);
+  assert.match(restarted.nodes.get('storage-state').textContent,/기기 저장됨/);
+  env.nodes.get('people').value='2';env.api.markChanged();
+  assert.match(env.nodes.get('storage-state').textContent,/저장 안 된 변경/);
+  assert.equal(env.storage.get('lucky-draw.portable.v1'),original);
+  env.api.saveOnDevice();assert.notEqual(env.storage.get('lucky-draw.portable.v1'),original);
+  assert.match(env.nodes.get('storage-state').textContent,/기기 저장됨/);
+});
+test('조작 대기·추첨 중·완료 상태와 변경한 설정의 재추첨 안내를 구분한다',async()=>{
+  const env=controller();env.api.setGame('tail');await env.api.startDraw();
+  assert.equal(env.nodes.get('draw-phase').textContent,'조작 대기');
+  await env.api.assistGesture();assert.equal(env.nodes.get('draw-phase').textContent,'추첨 중');env.finish();
+  assert.equal(env.nodes.get('draw-phase').textContent,'완료');
+  env.api.markChanged();assert.equal(env.nodes.get('draw-again').textContent,'변경한 설정으로 새 추첨');
+  assert.match(env.nodes.get('result-footnote').textContent,/이전 설정/);
 });

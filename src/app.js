@@ -40,6 +40,8 @@ let soundEnabled = false, audioContext = null, toastTimer;
 let htmlDownloadUrl = null, htmlShareFile = null;
 let stageFrame = { progress: 0, items: [], winner: 0, ended: false };
 let pointerGesture = null;
+let savedDeviceSignature = null, deviceDirty = true;
+try { const saved = localStorage.getItem(DEVICE_STORAGE_KEY); if (saved) savedDeviceSignature = deviceSignature(normalizePortable(JSON.parse(saved))); } catch { /* Saving remains optional. */ }
 const motionPreference = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : {matches:false};
 const reducedMotion = () => shouldReduceMotion(state.motionMode, motionPreference.matches);
 const nextPaint = () => new Promise(resolve => setTimeout(resolve, 0));
@@ -54,7 +56,50 @@ function toast(message) {
   clearTimeout(toastTimer); $('toast').textContent = message; $('toast').hidden = false;
   toastTimer = setTimeout(() => { $('toast').hidden = true; }, 3600);
 }
-function showError(message) { $('form-error').textContent = message; $('form-error').hidden = !message; }
+const ERROR_FIELDS = ['number-start','number-count','people','rounds','add-entry','csv-file'];
+function showError(message, fieldId = null) {
+  $('form-error').textContent = message; $('form-error').hidden = !message;
+  for (const id of ERROR_FIELDS) {
+    $(id).setAttribute('aria-invalid', String(!!message && id === fieldId));
+    $(`${id}-error`).textContent = id === fieldId ? message : '';
+    $(`${id}-error`).hidden = !message || id !== fieldId;
+  }
+}
+function checkedField(read, fieldId) {
+  try { return read(); } catch (error) { error.fieldId = fieldId; throw error; }
+}
+function validateSetup() {
+  configFromInputs();
+  if (state.mode === 'numbers') {
+    checkedField(() => integer(state.start, '시작 번호'), 'number-start');
+    checkedField(() => positiveInteger(state.count, '후보 수'), 'number-count');
+  }
+  const pool = checkedField(currentPool, state.mode === 'csv' ? 'csv-file' : 'add-entry');
+  checkedField(() => positiveInteger(state.people, '한 번에 뽑을 인원'), 'people');
+  checkedField(() => positiveInteger(state.rounds, '반복 횟수'), 'rounds');
+  const options = checkedField(() => validateDraw(pool, state.people, state.rounds, state.repeat), 'people');
+  return { pool, options };
+}
+function editSettings(fieldId = null) {
+  if (running) return;
+  $('setup-panel').scrollIntoView({ behavior: 'instant', block: 'start' });
+  $(fieldId || (state.mode === 'numbers' ? 'number-start' : state.mode === 'csv' ? 'csv-file' : 'add-entry')).focus({ preventScroll: true });
+}
+function setPhase(label) { $('draw-phase').textContent = label; }
+function deviceSignature(snapshot) {
+  const checked = normalizePortable(snapshot);
+  return safeJSON({ config: checked.config, lastResult: checked.lastResult, resultFresh: checked.resultFresh });
+}
+function updateDeviceStatus(checkSnapshot = false) {
+  if (checkSnapshot) deviceDirty = savedDeviceSignature === null || savedDeviceSignature !== deviceSignature(getPortableSnapshot());
+  const saved = savedDeviceSignature !== null && !deviceDirty;
+  $('storage-state').textContent = !webEnvironment ? '파일 실행 · 변경을 보관하려면 HTML 저장' : saved ? '기기 저장됨 · 현재 후보·설정·결과' : savedDeviceSignature === null ? '기기 저장 전 · 변경은 자동 저장되지 않아요' : '저장 안 된 변경 · 저장·도움말에서 다시 저장';
+  $('device-status').textContent = !webEnvironment ? '파일 실행에서는 HTML 저장으로 후보·설정·결과를 보관하세요.' : saved ? '현재 후보·설정·결과가 이 기기에 저장되어 있어요.' : '현재 변경은 이 기기에 저장되지 않았어요. 아래 버튼으로 직접 저장하세요.';
+}
+function updateResultActions() {
+  $('draw-again').textContent = resultFresh ? '같은 설정으로 새 추첨' : '변경한 설정으로 새 추첨';
+  $('result-footnote').textContent = resultFresh ? '새 추첨은 새로운 무작위 결과로 진행돼요.' : '위 결과는 이전 설정의 기록이에요. 새 추첨에는 변경한 설정이 적용돼요.';
+}
 function configFromInputs() {
   state.owner = $('owner').value;
   state.start = $('number-start').value; state.count = $('number-count').value;
@@ -73,7 +118,9 @@ function updateOwner() {
   document.title = `${ownerName()}의 럭키드로우`;
 }
 function markChanged() {
+  deviceDirty = true;
   if (lastResult) { resultFresh = false; $('result-subtitle').textContent = '이전 추첨 결과 · 새 설정은 다음 시작에 적용돼요'; }
+  updateResultActions(); updateDeviceStatus();
 }
 function updateStats(redraw = true) {
   configFromInputs();
@@ -87,6 +134,10 @@ function updateStats(redraw = true) {
     const people = positiveInteger(state.people), rounds = positiveInteger(state.rounds);
     $('draw-summary').textContent = `${formatCount(rounds)}회 × ${formatCount(people)}명 = 총 ${formatCount(people * rounds)}명 · 연출은 한 번만`;
   } catch { $('draw-summary').textContent = '인원과 횟수는 1 이상의 정수로 입력해주세요.'; }
+  let selection;
+  try { selection = `${formatCount(positiveInteger(state.people))}명 × ${formatCount(positiveInteger(state.rounds))}회`; }
+  catch { selection = '선정 인원·횟수 확인'; }
+  $('setup-summary').textContent = `후보 ${pool ? formatCount(pool.size) + '명' : '확인 필요'} · ${selection} · ${state.repeat ? '중복 허용' : '전체 회차 중복 없음'}`;
   if (state.mode === 'numbers') {
     const target = $('number-preview'); target.replaceChildren();
     try {
@@ -101,7 +152,7 @@ function updateStats(redraw = true) {
   if (redraw && !running) {
     stageFrame = { progress: 0, items: previewItems(pool), winner: 0, ended: false };
     document.querySelector('.game-panel').classList.remove('is-result');
-    $('stage-status').textContent = GAMES[state.game].ready;
+    $('stage-status').textContent = GAMES[state.game].ready; setPhase('준비');
     renderStage();
   }
 }
@@ -133,7 +184,7 @@ function renderEntries(focusIndex = null) {
     const row = el('div', 'entry-row'), input = el('input');
     input.type = 'text'; input.value = state.manual[i]; input.placeholder = String(i + 1);
     input.setAttribute('aria-label', `후보 ${i + 1}`); input.autocomplete = 'off';
-    input.addEventListener('input', () => { state.manual[i] = input.value; updateStats(); markChanged(); });
+    input.addEventListener('input', () => { state.manual[i] = input.value; updateStats(); showError(''); markChanged(); });
     const remove = el('button', '', '×'); remove.type = 'button'; remove.setAttribute('aria-label', `후보 ${i + 1} 삭제`);
     remove.addEventListener('click', () => { state.manual.splice(i, 1); renderEntries(); updateStats(); markChanged(); });
     row.append(el('span', '', String(i + 1)), input, remove); rows.append(row);
@@ -178,12 +229,13 @@ async function loadCsv(file) {
     if (loadId !== csvLoadId) return;
     $('csv-filename').textContent = '파일을 다시 선택해주세요';
     csvRows = []; state.csvEntries = []; $('csv-options').hidden = true;
-    updateStats(); showError(error.message);
+    updateStats(); showError(error.message, 'csv-file');
   }
 }
 function selectGame(game, changeView = true) {
   if (running || !Object.hasOwn(GAMES, game)) return;
   if (lastResult && lastResult.game !== game) markChanged();
+  if (state.game !== game) deviceDirty = true;
   state.game = game;
   $('game-title').textContent = GAMES[game].title; $('stage-eyebrow').textContent = GAMES[game].eyebrow;
   $('gesture-help').hidden = !['dart','tail'].includes(game);
@@ -191,7 +243,7 @@ function selectGame(game, changeView = true) {
   $('start-label').textContent = GAMES[game].action; $('game-canvas').setAttribute('aria-label', `${GAMES[game].title} 추첨 화면`);
   document.querySelector('.game-panel').dataset.game = game;
   if (changeView) { $('home-view').hidden = true; $('play-view').hidden = false; window.scrollTo({ top: 0, behavior: 'instant' }); }
-  updateOwner(); updateStats();
+  updateOwner(); updateStats(); updateDeviceStatus();
   requestAnimationFrame(renderStage);
 }
 function goHome() {
@@ -205,6 +257,7 @@ function setRunning(value) {
   $('save-html').disabled = value; $('run-actions').hidden = !value;
   $('restore-file').disabled = value; $('save-device').disabled = value;
   $('motion-mode').disabled = value;
+  for (const id of ['edit-settings','result-edit-settings','draw-again']) $(id).disabled = value;
   document.querySelector('.game-panel').classList.toggle('is-running', value);
   $('game-canvas').setAttribute('aria-busy', String(value));
   $('gesture-assist').hidden = true;
@@ -223,16 +276,16 @@ function makeDisplayItems(pool, winner) {
 async function startDraw() {
   if (running) return;
   let pool, options;
-  try { pool = currentPool(); options = validateDraw(pool, state.people, state.rounds, state.repeat); }
-  catch (error) { showError(error.message); return; }
+  try { ({ pool, options } = validateSetup()); }
+  catch (error) { showError(error.message, error.fieldId); setPhase('입력 확인'); editSettings(error.fieldId); return; }
   showError(''); $('results').hidden = true;
   const reduced = reducedMotion();
   const run = { cancelled: false, skip: false, computed: false, animationDone: false, draws: [], startedAt: performance.now(), options, pool, game: state.game, owner: ownerName(), repeat: state.repeat, reduced, duration: reduced ? 160 : Number(state.duration) };
-  activeRun = run; setRunning(true);
+  activeRun = run; setRunning(true); setPhase('추첨 중');
   $('stage-status').textContent = GAMES[run.game].running; $('start-label').textContent = '행운을 찾고 있어요…';
   if (options.total > 1n) $('stage-note').textContent = `연출은 첫 번째 결과를 보여줘요. 총 ${formatCount(options.total)}명의 결과는 아래에 함께 공개돼요.`;
   if(['dart','tail'].includes(run.game)){
-    run.waiting=true;run.angle=0;
+    run.waiting=true;run.angle=0;setPhase('조작 대기');
     stageFrame={progress:0,items:previewItems(pool),winner:0,ended:false,interaction:run};
     $('gesture-assist').hidden=false;$('gesture-assist').textContent=run.game==='dart'?'버튼으로 가운데 던지기':'버튼으로 가운데 꼬리 당기기';
     $('skip-button').hidden=true;$('game-canvas').focus({preventScroll:true});
@@ -244,6 +297,7 @@ async function startDraw() {
 async function computeDraw(run){
   const {pool,options}=run;
   if(activeRun!==run||run.cancelled||run.computing)return;
+  setPhase('추첨 중');
   run.computing=true;run.waiting=false;run.angleAtThrow=run.angle||0;run.startedAt=performance.now();
   if(run.game==='dart')$('stage-status').textContent='다트가 날아갑니다!';
   if(run.game==='tail')$('stage-status').textContent='꼬리 끝의 편지를 열고 있어요!';
@@ -345,7 +399,7 @@ function finishRun(run) {
   $('stage-status').textContent = `${GAMES[run.game].finish} ${shortLabel(run.draws[0].label, 34)}${run.draws.length > 1 ? ` 외 ${formatCount(BigInt(run.draws.length) - 1n)}명` : ''}`;
   $('start-label').textContent = '한 번 더 뽑기';
   lastResult = { draws: run.draws, perRound: run.options.perRound.toString(), rounds: run.options.roundCount.toString(), candidateCount: run.pool.size.toString(), game: run.game, owner: run.owner, repeat: run.repeat, at: new Date().toISOString() };
-  resultFresh = true; resultPage = 0; renderResults();
+  resultFresh = true; resultPage = 0; renderResults(); setPhase('완료'); deviceDirty = true; updateDeviceStatus();
   if (!run.reduced) burst();
   tone(523.25, .14, .045); setTimeout(() => tone(659.25, .16, .035), 90); setTimeout(() => tone(783.99, .23, .035), 180);
   $('results').focus({ preventScroll: true });
@@ -356,11 +410,12 @@ function cancelDraw() {
   activeRun.cancelled = true; activeRun.draws = []; activeRun = null;
   setRunning(false); updateStats(); $('start-label').textContent = GAMES[state.game].action;
   if (lastResult) renderResults();
+  setPhase('취소됨 · 준비'); $('stage-status').textContent = '이번 추첨은 취소됐어요. 다시 시작할 수 있어요.';
   toast('이번 추첨을 취소했어요.');
 }
 function renderResults() {
   if (!lastResult) return;
-  $('results').hidden = false;
+  $('results').hidden = false; updateResultActions();
   const perRound = positiveInteger(lastResult.perRound), count = lastResult.draws.length;
   $('result-subtitle').textContent = resultFresh ? "TODAY'S LUCKY PICKS" : '이전 추첨 결과 · 새 설정은 다음 시작에 적용돼요';
   $('results-heading').textContent = count === 1 ? '오늘의 행운이 도착했어요!' : `${count.toLocaleString('ko-KR')}명의 행운이 도착했어요!`;
@@ -503,7 +558,7 @@ function saveMotionPreference(){
 function changeMotionMode(){
   if(running)return;
   state.motionMode=motionModeFromConfig({motionMode:$('motion-mode').value});
-  saveMotionPreference();updateMotion();
+  saveMotionPreference();updateMotion();markChanged();
 }
 async function nativeSave(blob,name){
   if(!window.LuckyFiles?.postMessage){toast('Android System WebView를 업데이트한 뒤 다시 저장해주세요.');return;}
@@ -563,7 +618,7 @@ function applyPortableSnapshot(snapshot){
   if(state.csvEntries.length){csvRows=state.csvEntries.map(label=>[label]);$('csv-header').checked=false;$('csv-filename').textContent='HTML에서 불러온 후보';refreshCsvColumns();}
   setMode(state.mode);selectGame(state.game,checked.view==='play');if(checked.view!=='play')goHome();
   lastResult=checked.lastResult;resultFresh=checked.resultFresh;updateOwner();updateMotion();
-  if(lastResult)renderResults();
+  if(lastResult){renderResults();setPhase('복원된 결과');} updateDeviceStatus(true);
 }
 async function restoreSavedFile(file){
   if(!file||running)return;
@@ -579,7 +634,7 @@ function showUsage(){
   if(!webEnvironment)$('offline-status').textContent='현재 HTML은 파일 안의 코드로 작동합니다. 모바일 오프라인 준비는 웹 버전에서 이용하세요.';
   else if($('prepare-offline').disabled)$('offline-status').textContent='이 주소에서는 오프라인 준비가 지원되지 않아요. HTTPS 웹 버전을 사용해주세요.';
   if(nativeApp){$('offline-status').textContent='오프라인 APK: 게임이 앱 안에 들어 있어요. 인터넷과 로그인 없이 바로 실행됩니다.';$('prepare-offline').hidden=true;$('web-version').hidden=true;$('mobile-offline-intro').textContent='이 앱은 게임을 포함한 Android 오프라인 버전입니다. 별도 준비 없이 사용하세요.';}
-  $('usage-dialog').showModal();
+  updateDeviceStatus(); $('usage-dialog').showModal();
 }
 async function prepareOffline(){
   if(!installableLocation||!window.isSecureContext||!('serviceWorker' in navigator))return;
@@ -601,7 +656,7 @@ async function prepareOffline(){
 }
 function saveOnDevice(){
   if(!webEnvironment||running)return;
-  try{localStorage.setItem(DEVICE_STORAGE_KEY,safeJSON(getPortableSnapshot()));$('device-status').textContent='현재 후보·설정·마지막 결과를 이 기기에 저장했어요. 설정을 바꾸면 다시 저장해주세요.';}
+  try{const snapshot=getPortableSnapshot();localStorage.setItem(DEVICE_STORAGE_KEY,safeJSON(snapshot));savedDeviceSignature=deviceSignature(snapshot);deviceDirty=false;updateDeviceStatus();toast('현재 후보·설정·결과를 이 기기에 저장했어요.');}
   catch{$('device-status').textContent='이 브라우저에서 저장 공간을 사용할 수 없어요. HTML 저장을 이용해주세요.';}
 }
 
@@ -611,7 +666,7 @@ $('settings').disabled=false;$('home-button').disabled=false;$('back-button').di
 $('run-actions').hidden=true;$('form-error').hidden=true;$('results').hidden=true;
 $('owner').addEventListener('input',()=>{updateOwner();markChanged();});
 for(const id of ['number-start','number-count','people','rounds','repeat','duration'])$(id).addEventListener(id==='repeat'||id==='duration'?'change':'input',()=>{updateStats();showError('');markChanged();});
-$('add-number').addEventListener('click',()=>{try{$('number-count').value=(positiveInteger($('number-count').value)+1n).toString();updateStats();markChanged();}catch(error){showError(error.message);}});
+$('add-number').addEventListener('click',()=>{try{$('number-count').value=(positiveInteger($('number-count').value)+1n).toString();updateStats();markChanged();}catch(error){showError(error.message,'number-count');}});
 $('add-entry').addEventListener('click',()=>{state.manual.push(String(state.manual.length+1));entryPage=Math.floor((state.manual.length-1)/ENTRY_PAGE_SIZE);renderEntries(state.manual.length-1);updateStats();markChanged();});
 $('entry-prev').addEventListener('click',()=>{entryPage--;renderEntries();});$('entry-next').addEventListener('click',()=>{entryPage++;renderEntries();});
 for(const button of document.querySelectorAll('[data-mode]'))button.addEventListener('click',()=>setMode(button.dataset.mode));
@@ -636,7 +691,9 @@ $('game-canvas').addEventListener('pointercancel',event=>pointerEnd(event,true))
 $('game-canvas').addEventListener('lostpointercapture',event=>pointerEnd(event,true));
 $('game-canvas').addEventListener('keydown',event=>{if((event.key==='Enter'||event.key===' ')&&activeRun?.waiting){event.preventDefault();assistGesture();}});
 window.addEventListener('blur',()=>{pointerGesture=null;if(activeRun)activeRun.drag=null;});
-$('start-button').addEventListener('click',startDraw);$('cancel-button').addEventListener('click',cancelDraw);
+$('start-button').addEventListener('click',startDraw);
+$('draw-again').addEventListener('click',startDraw);
+$('edit-settings').addEventListener('click',()=>editSettings());$('result-edit-settings').addEventListener('click',()=>editSettings());$('cancel-button').addEventListener('click',cancelDraw);
 $('skip-button').addEventListener('click',()=>{if(!activeRun)return;activeRun.skip=true;if(activeRun.computed)finishRun(activeRun);else toast('연출은 건너뛰고, 결과 계산을 마치는 대로 보여드릴게요.');});
 $('sound-toggle').addEventListener('click',()=>{soundEnabled=!soundEnabled;if(soundEnabled)initSound();updateSound();if(soundEnabled)tone(660,.1,.03);});
 $('motion-mode').addEventListener('change',changeMotionMode);
@@ -663,5 +720,6 @@ try{
     lastResult={...result,owner:String(result.owner),draws:result.draws.map(draw=>({label:String(draw.label),id:String(draw.id)}))};resultFresh=portable.resultFresh!==false;renderResults();
   }
 }catch{lastResult=null;}
+if(lastResult)setPhase('복원된 결과'); updateDeviceStatus(true);
 requestAnimationFrame(()=>{renderStage();renderPreviews();});
 if(window.LuckyBoot)window.LuckyBoot.ready();
